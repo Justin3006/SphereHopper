@@ -31,11 +31,24 @@ public class PlayerMotor : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //move position
         rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * movSpeed * movDir));
+        
+        //rotate body
         //TODO: Change Rotate to Lerp for smoother controlls
         transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
-        //TODO: Add Rotation Constraints to the Camera
-        cam.transform.Rotate(-Time.fixedDeltaTime * camRotSpeed * camRotDir, 0, 0);
+
+        //rotate cam 
+        float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
+        float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
+        
+        if (newCamRot < 270 && newCamRot >= 180)
+            cam.transform.LookAt(cam.transform.position + transform.up, -transform.forward);
+        else if (newCamRot > 90 && newCamRot < 180)
+            cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
+        else
+            //TODO: Change Rotate to Lerp for smoother controlls
+            cam.transform.Rotate(camRotChange, 0, 0);
     }
 
     public void Move(Vector3 movDir)

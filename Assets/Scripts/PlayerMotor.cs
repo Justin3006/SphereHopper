@@ -20,6 +20,10 @@ public class PlayerMotor : MonoBehaviour
     float camRotSpeed = 360;
     float camRotDir;
 
+    [SerializeField]
+    float jumpPower = 5;
+    bool jump;
+
 
     // Start is called before the first frame update
     void Start()
@@ -49,6 +53,14 @@ public class PlayerMotor : MonoBehaviour
         else
             //TODO: Change Rotate to Lerp for smoother controlls
             cam.transform.Rotate(camRotChange, 0, 0);
+
+        //jump
+        if (jump && Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+        }
+
+        jump = false;
     }
 
     public void Move(Vector3 movDir)
@@ -64,5 +76,10 @@ public class PlayerMotor : MonoBehaviour
     public void RotateCam(float camRotDir) 
     {
         this.camRotDir = camRotDir;
+    }
+
+    public void Jump() 
+    {
+        jump = true;
     }
 }

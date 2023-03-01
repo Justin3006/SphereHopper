@@ -32,6 +32,10 @@ public class PlayerController : MonoBehaviour
         float xRotate = Input.GetAxis("Mouse Y");
         motor.RotateCam(xRotate);
 
-        //TODO: Jump, Dash, other Interactions
+        //Handle jump
+        if(Input.GetButtonDown("Jump"))
+            motor.Jump();
+
+        //TODO: Dash, other Interactions
     }
 }

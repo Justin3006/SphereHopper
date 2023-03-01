@@ -21,8 +21,18 @@ public class PlayerMotor : MonoBehaviour
     float camRotDir;
 
     [SerializeField]
-    float jumpPower = 5;
+    float jumpPower = 10;
     bool jump;
+
+    [SerializeField]
+    float dashSpeed = 20;
+    [SerializeField]
+    float dashDurationMax = 0.25f;
+    float dashDuration;
+    [SerializeField]
+    float dashCDMax = 1;
+    float dashCD;
+    bool dash;
 
 
     // Start is called before the first frame update
@@ -61,6 +71,23 @@ public class PlayerMotor : MonoBehaviour
         }
 
         jump = false;
+
+        //dash
+        if (dash && dashCD <= 0) 
+        {
+            dashDuration = dashDurationMax;
+            dashCD = dashCDMax;
+        }
+        if (dashDuration > 0)
+        {
+            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * movDir);
+            dashDuration -= Time.fixedDeltaTime;
+        }
+        if (dashCD > 0) 
+        {
+            dashCD -= Time.fixedDeltaTime;
+        }
+        dash = false;
     }
 
     public void Move(Vector3 movDir)
@@ -81,5 +108,10 @@ public class PlayerMotor : MonoBehaviour
     public void Jump() 
     {
         jump = true;
+    }
+
+    public void Dash() 
+    {
+        dash = true;
     }
 }

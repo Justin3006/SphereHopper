@@ -33,9 +33,12 @@ public class PlayerController : MonoBehaviour
         motor.RotateCam(xRotate);
 
         //Handle jump
-        if(Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump"))
             motor.Jump();
 
-        //TODO: Dash, other Interactions
+        //Handle dash
+        if (Input.GetButtonDown("Dash"))
+            motor.Dash();
+        //TODO: other Interactions
     }
 }

@@ -45,32 +45,33 @@ public class PlayerMotor : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        //move position
-        rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * movSpeed * movDir));
-        
-        //rotate body
-        //TODO: Change Rotate to Lerp for smoother controlls
-        transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
-
-        //rotate cam 
-        float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
-        float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
-        
-        if (newCamRot < 270 && newCamRot >= 180)
-            cam.transform.LookAt(cam.transform.position + transform.up, -transform.forward);
-        else if (newCamRot > 90 && newCamRot < 180)
-            cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
-        else
-            //TODO: Change Rotate to Lerp for smoother controlls
-            cam.transform.Rotate(camRotChange, 0, 0);
-
-        //jump
-        if (jump && Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+        if (dashDuration <= 0)
         {
-            rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
-        }
+            //move position
+            rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * movSpeed * movDir));
 
-        jump = false;
+            //rotate body
+            //TODO: Change Rotate to Lerp for smoother controlls
+            transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
+
+            //rotate cam 
+            float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
+            float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
+
+            if (newCamRot < 270 && newCamRot >= 180)
+                cam.transform.LookAt(cam.transform.position + transform.up, -transform.forward);
+            else if (newCamRot > 90 && newCamRot < 180)
+                cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
+            else
+                //TODO: Change Rotate to Lerp for smoother controlls
+                cam.transform.Rotate(camRotChange, 0, 0);
+
+            //jump
+            if (jump && Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+            {
+                rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+            }
+        }
 
         //dash
         if (dash && dashCD <= 0) 
@@ -80,13 +81,16 @@ public class PlayerMotor : MonoBehaviour
         }
         if (dashDuration > 0)
         {
-            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * movDir);
+            rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * dashSpeed * movDir));
             dashDuration -= Time.fixedDeltaTime;
         }
         if (dashCD > 0) 
         {
             dashCD -= Time.fixedDeltaTime;
         }
+
+        //Reset notifications
+        jump = false;
         dash = false;
     }
 

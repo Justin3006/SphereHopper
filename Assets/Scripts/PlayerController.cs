@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
         //Handle dash
         if (Input.GetButtonDown("Dash"))
             motor.Dash();
-        //TODO: other Interactions
+
+        //TODO: other Interactions like Inventory and Combat
     }
 }

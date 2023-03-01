@@ -21,16 +21,16 @@ public class PlayerMotor : MonoBehaviour
     float camRotDir;
 
     [SerializeField]
-    float jumpPower = 10;
+    float jumpPower = 7.5f;
     bool jump;
 
     [SerializeField]
-    float dashSpeed = 20;
+    float dashSpeed = 30;
     [SerializeField]
-    float dashDurationMax = 0.25f;
+    float dashDurationMax = 0.035f;
     float dashDuration;
     [SerializeField]
-    float dashCDMax = 1;
+    float dashCDMax = 0.6f;
     float dashCD;
     bool dash;
 

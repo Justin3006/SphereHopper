@@ -420,12 +420,20 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: dashCDMax
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: dashSpeed
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: jumpPower
       value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: dashDurationMax
-      value: 0.15
+      value: 0.035
       objectReference: {fileID: 0}
     - target: {fileID: 7521923324518417235, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: m_RootOrder

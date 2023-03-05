@@ -34,6 +34,9 @@ public class PlayerMotor : MonoBehaviour
     float dashCD;
     bool dash;
 
+    bool walk;
+
+    float movLockTime;
 
     // Start is called before the first frame update
     void Start()
@@ -45,16 +48,17 @@ public class PlayerMotor : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (dashDuration <= 0)
+        // Handle direct inputs.
+        if (movLockTime <= 0)
         {
-            //move position
+            // move position
             rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * movSpeed * movDir));
 
-            //rotate body
-            //TODO: Change Rotate to Lerp for smoother controlls
+            // rotate body
+            // TODO: Change Rotate to Lerp for smoother controlls
             transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
 
-            //rotate cam 
+            // rotate cam 
             float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
             float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
 
@@ -66,19 +70,22 @@ public class PlayerMotor : MonoBehaviour
                 //TODO: Change Rotate to Lerp for smoother controlls
                 cam.transform.Rotate(camRotChange, 0, 0);
 
-            //jump
+            // jump
             if (jump && Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
             {
                 rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
             }
+
+            // dash
+            if (dash && dashCD <= 0)
+            {
+                dashDuration = dashDurationMax;
+                movLockTime = dashDurationMax;
+                dashCD = dashCDMax;
+            }
         }
 
-        //dash
-        if (dash && dashCD <= 0) 
-        {
-            dashDuration = dashDurationMax;
-            dashCD = dashCDMax;
-        }
+        // Handle continuation of dash.
         if (dashDuration > 0)
         {
             rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * dashSpeed * movDir));
@@ -89,7 +96,13 @@ public class PlayerMotor : MonoBehaviour
             dashCD -= Time.fixedDeltaTime;
         }
 
-        //Reset notifications
+        // Release lock.
+        if (movLockTime > 0) 
+        {
+            movLockTime -= Time.fixedDeltaTime;
+        }
+
+        // Reset notifications.
         jump = false;
         dash = false;
     }
@@ -117,5 +130,14 @@ public class PlayerMotor : MonoBehaviour
     public void Dash() 
     {
         dash = true;
+    }
+
+    public void Walk() 
+    {
+        if (!walk)
+            movSpeed /= 1.9f;
+        else
+            movSpeed *= 1.9f;
+        walk = !walk;
     }
 }

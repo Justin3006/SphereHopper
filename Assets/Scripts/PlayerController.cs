@@ -32,13 +32,15 @@ public class PlayerController : MonoBehaviour
         float xRotate = Input.GetAxis("Mouse Y");
         motor.RotateCam(xRotate);
 
-        //Handle jump
+        //Handle advanced movement
         if (Input.GetButtonDown("Jump"))
             motor.Jump();
 
-        //Handle dash
         if (Input.GetButtonDown("Dash"))
             motor.Dash();
+
+        if (Input.GetButtonDown("Walk"))
+            motor.Walk();
 
         //TODO: other Interactions like Inventory and Combat
     }

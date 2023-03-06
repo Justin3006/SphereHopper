@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMotor : MonoBehaviour
+public class PlayerMotor : Vulnerable
 {
     Rigidbody rb;
     Camera cam;
@@ -38,11 +38,35 @@ public class PlayerMotor : MonoBehaviour
 
     float movLockTime;
 
+
+    [SerializeField]
+    float attackCDMax = 0.5f;
+    [SerializeField]
+    float attackDurationMax = 0.25f;
+    float attackDuration;
+    [SerializeField]
+    float parryCDMax = 0.5f;
+    [SerializeField]
+    float parryDurationMax = 0.25f;
+    float parryDuration;
+    float swordCD;
+
+    const float ATTACK_RANGE = 2;
+
+
+    [SerializeField]
+    GameObject distanceIndicator;
+    [SerializeField]
+    GameObject dashIndicator;
+    [SerializeField]
+    GameObject swordIndicator;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         cam = GetComponentInChildren<Camera>();
+        hp = maxHp;
     }
 
     // Update is called once per frame
@@ -71,17 +95,18 @@ public class PlayerMotor : MonoBehaviour
                 cam.transform.Rotate(camRotChange, 0, 0);
 
             // jump
-            if (jump && Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+            if (jump)
             {
                 rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
             }
 
             // dash
-            if (dash && dashCD <= 0)
+            if (dash)
             {
                 dashDuration = dashDurationMax;
                 movLockTime = dashDurationMax;
                 dashCD = dashCDMax;
+                dashIndicator.SetActive(false);
             }
         }
 
@@ -91,15 +116,71 @@ public class PlayerMotor : MonoBehaviour
             rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * dashSpeed * movDir));
             dashDuration -= Time.fixedDeltaTime;
         }
+
+
+        //Handle execution of combat actions.
+        //TODO: move sword indicator for different actions
+        RaycastHit hit;
+        Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 2);
+
+        //distance indicator
+        float distancePercent = 0;
+        if (hit.collider != null)
+            distancePercent = hit.distance / ATTACK_RANGE;
+        distanceIndicator.GetComponent<RectTransform>().localScale = new Vector3(distancePercent, distancePercent, 1);
+
+        //attack
+        if (attackDuration > 0) 
+        {
+            attackDuration -= Time.deltaTime;
+            if (attackDuration <= 0) 
+            {
+                Debug.Log("Attack");
+                if (hit.collider != null && hit.distance <= ATTACK_RANGE)
+                {
+                    Vulnerable target = hit.collider.gameObject.GetComponent<Vulnerable>();
+                    target.Hit();
+                }
+            }
+        }
+
+        //parry
+        if (parryDuration > 0)
+        {
+            parryDuration -= Time.deltaTime;
+            if (parryDuration <= 0)
+            {
+                shielded = false;
+                Debug.Log("Parry");
+                if (shieldedAttacks >= 1) 
+                {
+                    swordCD /= 2;
+                }
+            }
+        }
+
+
+        // Handle cooldowns.
         if (dashCD > 0) 
         {
             dashCD -= Time.fixedDeltaTime;
+            if (dashCD <= 0)
+            {
+                dashIndicator.SetActive(true);
+                Debug.Log("Dash ready");
+            }
         }
 
-        // Release lock.
         if (movLockTime > 0) 
         {
             movLockTime -= Time.fixedDeltaTime;
+        }
+
+        if (swordCD > 0)
+        {
+            swordCD -= Time.fixedDeltaTime;
+            if (swordCD <= 0)
+                Debug.Log("Sword ready");
         }
 
         // Reset notifications.
@@ -124,12 +205,14 @@ public class PlayerMotor : MonoBehaviour
 
     public void Jump() 
     {
-        jump = true;
+        if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+            jump = true;
     }
 
     public void Dash() 
     {
-        dash = true;
+        if (dashCD <= 0)
+            dash = true;
     }
 
     public void Walk() 
@@ -139,5 +222,24 @@ public class PlayerMotor : MonoBehaviour
         else
             movSpeed *= 1.9f;
         walk = !walk;
+    }
+
+    public void Attack()
+    {
+        if (swordCD <= 0)
+        {
+            swordCD = attackCDMax;
+            attackDuration = attackDurationMax;
+        }
+    }
+
+    public void Parry()
+    {
+        if (swordCD <= 0)
+        {
+            shielded = true;
+            swordCD = parryCDMax;
+            parryDuration = parryDurationMax;
+        }
     }
 }

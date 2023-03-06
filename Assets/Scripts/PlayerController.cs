@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Handle basic movement
+        // Handle basic movement.
         float xMove = Input.GetAxisRaw("Horizontal");
         float zMove = Input.GetAxisRaw("Vertical");
 
@@ -24,15 +24,15 @@ public class PlayerController : MonoBehaviour
 
         motor.Move(movDir);
 
-        //Handle body rotation
+        // Handle body rotation.
         float yRotate = Input.GetAxis("Mouse X");
         motor.Rotate(yRotate);
 
-        //Handle cam rotation
+        // Handle cam rotation.
         float xRotate = Input.GetAxis("Mouse Y");
         motor.RotateCam(xRotate);
 
-        //Handle advanced movement
+        // Handle advanced movement.
         if (Input.GetButtonDown("Jump"))
             motor.Jump();
 
@@ -42,6 +42,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Walk"))
             motor.Walk();
 
-        //TODO: other Interactions like Inventory and Combat
+        //Handle combat.
+        if (Input.GetButtonDown("Fire1"))
+            motor.Attack();
+        else if (Input.GetButtonDown("Fire2"))
+            motor.Parry();
+
+        //TODO: other interactions like inventory, etc.
     }
 }

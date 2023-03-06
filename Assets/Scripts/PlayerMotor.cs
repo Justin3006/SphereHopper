@@ -40,9 +40,9 @@ public class PlayerMotor : Vulnerable
 
 
     [SerializeField]
-    float attackCDMax = 0.5f;
+    float attackCDMax = 0.4f;
     [SerializeField]
-    float attackDurationMax = 0.25f;
+    float attackDurationMax = 0.1f;
     float attackDuration;
     [SerializeField]
     float parryCDMax = 0.5f;
@@ -121,7 +121,7 @@ public class PlayerMotor : Vulnerable
         //Handle execution of combat actions.
         //TODO: move sword indicator for different actions
         RaycastHit hit;
-        Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 2);
+        Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 3);
 
         //distance indicator
         float distancePercent = 0;
@@ -135,12 +135,13 @@ public class PlayerMotor : Vulnerable
             attackDuration -= Time.deltaTime;
             if (attackDuration <= 0) 
             {
-                Debug.Log("Attack");
                 if (hit.collider != null && hit.distance <= ATTACK_RANGE)
                 {
                     Vulnerable target = hit.collider.gameObject.GetComponent<Vulnerable>();
-                    target.Hit();
+                    if(target != null)
+                        target.Hit();
                 }
+                swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
         }
 
@@ -151,11 +152,11 @@ public class PlayerMotor : Vulnerable
             if (parryDuration <= 0)
             {
                 shielded = false;
-                Debug.Log("Parry");
                 if (shieldedAttacks >= 1) 
                 {
                     swordCD /= 2;
                 }
+                swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
         }
 
@@ -167,7 +168,6 @@ public class PlayerMotor : Vulnerable
             if (dashCD <= 0)
             {
                 dashIndicator.SetActive(true);
-                Debug.Log("Dash ready");
             }
         }
 
@@ -179,8 +179,10 @@ public class PlayerMotor : Vulnerable
         if (swordCD > 0)
         {
             swordCD -= Time.fixedDeltaTime;
-            if (swordCD <= 0)
-                Debug.Log("Sword ready");
+            if (swordCD <= 0) 
+            {
+                swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, -200, 0);
+            }
         }
 
         // Reset notifications.
@@ -230,6 +232,7 @@ public class PlayerMotor : Vulnerable
         {
             swordCD = attackCDMax;
             attackDuration = attackDurationMax;
+            swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, 200, 0);
         }
     }
 
@@ -240,6 +243,7 @@ public class PlayerMotor : Vulnerable
             shielded = true;
             swordCD = parryCDMax;
             parryDuration = parryDurationMax;
+            swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, 200, 0);
         }
     }
 }

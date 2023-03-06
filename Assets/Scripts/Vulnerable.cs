@@ -26,7 +26,7 @@ public class Vulnerable : MonoBehaviour
         }
 
         hp--;
-        Debug.Log("Hit");
+        Debug.Log("Hit " + gameObject.name);
         if (hp <= 0)
             Destroy(gameObject);
         return true;

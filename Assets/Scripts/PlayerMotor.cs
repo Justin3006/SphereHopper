@@ -51,8 +51,8 @@ public class PlayerMotor : Vulnerable
     float parryDuration;
     float swordCD;
 
-    const float ATTACK_RANGE = 2;
-
+    const float ATTACK_RANGE = 3;
+    
 
     [SerializeField]
     GameObject distanceIndicator;
@@ -60,6 +60,8 @@ public class PlayerMotor : Vulnerable
     GameObject dashIndicator;
     [SerializeField]
     GameObject swordIndicator;
+    [SerializeField]
+    GameObject hitIndicator;
 
     // Start is called before the first frame update
     void Start()
@@ -119,14 +121,15 @@ public class PlayerMotor : Vulnerable
 
 
         //Handle execution of combat actions.
-        //TODO: move sword indicator for different actions
         RaycastHit hit;
-        Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 3);
+        Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 2.5f);
 
         //distance indicator
         float distancePercent = 0;
-        if (hit.collider != null)
+        if (hit.collider != null && hit.collider.gameObject.GetComponent<Vulnerable>() != null)
+        {
             distancePercent = hit.distance / ATTACK_RANGE;
+        }
         distanceIndicator.GetComponent<RectTransform>().localScale = new Vector3(distancePercent, distancePercent, 1);
 
         //attack
@@ -138,8 +141,11 @@ public class PlayerMotor : Vulnerable
                 if (hit.collider != null && hit.distance <= ATTACK_RANGE)
                 {
                     Vulnerable target = hit.collider.gameObject.GetComponent<Vulnerable>();
-                    if(target != null)
+                    if (target != null)
+                    {
+                        hitIndicator.SetActive(true);
                         target.Hit();
+                    }
                 }
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
@@ -182,6 +188,7 @@ public class PlayerMotor : Vulnerable
             if (swordCD <= 0) 
             {
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, -200, 0);
+                hitIndicator.SetActive(false);
             }
         }
 

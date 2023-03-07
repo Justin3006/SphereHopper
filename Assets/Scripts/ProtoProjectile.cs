@@ -13,8 +13,8 @@ public class ProtoProjectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(0,0, 5f * Time.deltaTime);
-        transform.Rotate(0, 180 * Time.deltaTime, 0);
+        transform.Translate(0,0, 10f * Time.deltaTime);
+        transform.Rotate(0, 360 * Time.deltaTime, 0);
     }
 
     public void OnTriggerEnter(Collider other)

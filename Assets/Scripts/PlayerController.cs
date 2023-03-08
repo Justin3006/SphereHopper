@@ -48,6 +48,17 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetButtonDown("Fire2"))
             motor.Parry();
 
+        //TODO: implement interaction properly in motor
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f))
+            {
+                Transporter t = hit.collider.gameObject.GetComponent<Transporter>();
+                if(t != null)
+                    t.Interact();
+            }
+        }
         //TODO: other interactions like inventory, etc.
     }
 }

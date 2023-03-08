@@ -260,9 +260,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc6815164bb806d47acd746085422bfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 3
+  damageIndicator: {fileID: 0}
+  indicatorDurationMax: 0.2
   movSpeed: 7
   rotSpeed: 360
   camRotSpeed: 360
+  jumpPower: 7.5
+  dashSpeed: 30
+  dashDurationMax: 0.035
+  dashCDMax: 0.6
+  attackCDMax: 0.4
+  attackDurationMax: 0.01
+  parryCDMax: 0.5
+  parryDurationMax: 0.25
+  distanceIndicator: {fileID: 0}
+  dashIndicator: {fileID: 0}
+  swordIndicator: {fileID: 0}
+  hitIndicator: {fileID: 0}
 --- !u!114 &7521923324518417239
 MonoBehaviour:
   m_ObjectHideFlags: 0

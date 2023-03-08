@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 public class Vulnerable : MonoBehaviour
 {
     [SerializeField]
@@ -14,7 +14,7 @@ public class Vulnerable : MonoBehaviour
     [SerializeField]
     GameObject damageIndicator;
     [SerializeField]
-    float indicatorDurationMax = 0.1f;
+    float indicatorDurationMax = 0.2f;
     float indicatorDuration;
 
     // Start is called before the first frame update
@@ -38,6 +38,12 @@ public class Vulnerable : MonoBehaviour
         if (shielded)
         {
             shieldedAttacks++;
+            if (damageIndicator != null)
+            {
+                indicatorDuration = indicatorDurationMax;
+                damageIndicator.GetComponent<Image>().color = Color.cyan;
+                damageIndicator.SetActive(true);
+            }
             return false;
         }
 
@@ -48,6 +54,7 @@ public class Vulnerable : MonoBehaviour
         if (damageIndicator != null)
         {
             indicatorDuration = indicatorDurationMax;
+            damageIndicator.GetComponent<Image>().color = Color.red;
             damageIndicator.SetActive(true);
         }
         return true;

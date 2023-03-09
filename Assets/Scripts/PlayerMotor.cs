@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -54,7 +55,7 @@ public class PlayerMotor : Vulnerable
     const float ATTACK_RANGE = 3;
 
 
-    int[] equippedAbilities = {0,3,2};
+    int[,] equippedAbilities = { { 0, 3 }, { 3, 3 }, { 2, 3 } };
     int selectedAbility;
     
 
@@ -66,6 +67,8 @@ public class PlayerMotor : Vulnerable
     GameObject swordIndicator;
     [SerializeField]
     GameObject hitIndicator;
+    [SerializeField]
+    GameObject abilityText;
 
     // Start is called before the first frame update
     void Start()
@@ -196,6 +199,8 @@ public class PlayerMotor : Vulnerable
             }
         }
 
+        handleDmgIndicator();
+
         // Reset notifications.
         jump = false;
         dash = false;
@@ -258,6 +263,18 @@ public class PlayerMotor : Vulnerable
         }
     }
 
+    public void Interact() 
+    {
+        //TODO: handle in FixedUpdate?
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE))
+        {
+            Transporter t = hit.collider.gameObject.GetComponent<Transporter>();
+            if (t != null)
+                t.Interact();
+        }
+    }
+
     private void IntToAbility(int ability) 
     {
         switch (ability) 
@@ -269,16 +286,22 @@ public class PlayerMotor : Vulnerable
         }
     }
 
-    public void ActivateAbility() 
+    public void ActivateAbility()
     {
-        IntToAbility(equippedAbilities[selectedAbility]);
+        if (equippedAbilities[selectedAbility, 1] > 0)
+        {
+            equippedAbilities[selectedAbility, 1]--;
+            IntToAbility(equippedAbilities[selectedAbility, 0]);
+            abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility, 1] + " uses left\n Ability " + equippedAbilities[selectedAbility, 0];
+        }
     }
 
     public void SwitchAbility(int dir) 
     {
-        selectedAbility = (selectedAbility + dir) % equippedAbilities.Length;
+        selectedAbility = (selectedAbility + dir) % equippedAbilities.GetLength(0);
         if (selectedAbility < 0)
-            selectedAbility = equippedAbilities.Length - 1;
+            selectedAbility = equippedAbilities.GetLength(0) - 1;
+        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility, 1] + " uses left\n Ability " + equippedAbilities[selectedAbility, 0];
     }
 
     public void PlaceHolderAbility1() 
@@ -288,7 +311,7 @@ public class PlayerMotor : Vulnerable
 
     public void PlaceHolderAbility2()
     {
-        Debug.Log("lol");
+        transform.Rotate(0,180,0);
     }
 
     public void PlaceHolderAbility3()

@@ -18,10 +18,10 @@ public class ProtoProjectile : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.Translate(0,0, direction * speed * Time.deltaTime);
-        transform.Rotate(0, direction * rotation * Time.deltaTime, 0);
+        transform.Translate(0,0, direction * speed * Time.fixedDeltaTime);
+        transform.Rotate(0, direction * rotation * Time.fixedDeltaTime, 0);
     }
 
     public void OnTriggerEnter(Collider other)

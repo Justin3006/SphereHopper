@@ -23,7 +23,7 @@ public class Vulnerable : MonoBehaviour
         hp = maxHp;
     }
 
-    private void Update()
+    protected void handleDmgIndicator()
     {
         if (damageIndicator != null && indicatorDuration > 0)
         {
@@ -31,6 +31,11 @@ public class Vulnerable : MonoBehaviour
             if (indicatorDuration <= 0)
                 damageIndicator.SetActive(false);
         }
+    }
+
+    private void FixedUpdate()
+    {
+        handleDmgIndicator();
     }
 
     public bool Hit() 

@@ -42,23 +42,12 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Walk"))
             motor.Walk();
 
+
         //Handle combat.
         if (Input.GetButtonDown("Fire1"))
             motor.Attack();
         else if (Input.GetButtonDown("Fire2"))
             motor.Parry();
-
-        //TODO: implement interaction properly in motor
-        if (Input.GetButtonDown("Interact"))
-        {
-            RaycastHit hit;
-            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f))
-            {
-                Transporter t = hit.collider.gameObject.GetComponent<Transporter>();
-                if(t != null)
-                    t.Interact();
-            }
-        }
 
         //Handle Abilities
         if (Input.GetButtonDown("Ability")) 
@@ -71,6 +60,11 @@ public class PlayerController : MonoBehaviour
             motor.SwitchAbility(1);
         if (Input.GetButtonDown("Ability Switch Down"))
             motor.SwitchAbility(-1);
+
+
+        //Handle Interactions
+        if (Input.GetButtonDown("Interact"))
+            motor.Interact();
 
         //TODO: other actions like inventory, etc.
     }

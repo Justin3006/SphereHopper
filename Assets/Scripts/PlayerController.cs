@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
             motor.Parry();
 
         //TODO: implement interaction properly in motor
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetButtonDown("Interact"))
         {
             RaycastHit hit;
             if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, 2f))
@@ -59,6 +59,19 @@ public class PlayerController : MonoBehaviour
                     t.Interact();
             }
         }
-        //TODO: other interactions like inventory, etc.
+
+        //Handle Abilities
+        if (Input.GetButtonDown("Ability")) 
+        {
+            motor.ActivateAbility();
+        }
+
+        //TODO: replace with Mouse ScrollWheel?
+        if (Input.GetButtonDown("Ability Switch Up"))
+            motor.SwitchAbility(1);
+        if (Input.GetButtonDown("Ability Switch Down"))
+            motor.SwitchAbility(-1);
+
+        //TODO: other actions like inventory, etc.
     }
 }

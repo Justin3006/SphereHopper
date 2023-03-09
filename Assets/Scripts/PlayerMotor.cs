@@ -52,6 +52,10 @@ public class PlayerMotor : Vulnerable
     float swordCD;
 
     const float ATTACK_RANGE = 3;
+
+
+    int[] equippedAbilities = {0,3,2};
+    int selectedAbility;
     
 
     [SerializeField]
@@ -239,7 +243,7 @@ public class PlayerMotor : Vulnerable
         {
             swordCD = attackCDMax;
             attackDuration = attackDurationMax;
-            swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, 200, 0);
+            swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, 200, 0);
         }
     }
 
@@ -250,7 +254,45 @@ public class PlayerMotor : Vulnerable
             shielded = true;
             swordCD = parryCDMax;
             parryDuration = parryDurationMax;
-            swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, 200, 0);
+            swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, 200, 0);
         }
+    }
+
+    private void IntToAbility(int ability) 
+    {
+        switch (ability) 
+        {
+            case 0: PlaceHolderAbility1(); break;
+            case 1: Debug.Log("Ability 1"); break;
+            case 2: PlaceHolderAbility2(); break;
+            case 3: PlaceHolderAbility3(); break;
+        }
+    }
+
+    public void ActivateAbility() 
+    {
+        IntToAbility(equippedAbilities[selectedAbility]);
+    }
+
+    public void SwitchAbility(int dir) 
+    {
+        selectedAbility = (selectedAbility + dir) % equippedAbilities.Length;
+        if (selectedAbility < 0)
+            selectedAbility = equippedAbilities.Length - 1;
+    }
+
+    public void PlaceHolderAbility1() 
+    {
+        rb.AddForce(0,5000,0);
+    }
+
+    public void PlaceHolderAbility2()
+    {
+        Debug.Log("lol");
+    }
+
+    public void PlaceHolderAbility3()
+    {
+        rb.AddForce(100, 100, 100);
     }
 }

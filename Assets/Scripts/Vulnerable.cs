@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class Vulnerable : MonoBehaviour
 {
     [SerializeField]
@@ -53,9 +54,11 @@ public class Vulnerable : MonoBehaviour
         }
 
         hp--;
-        Debug.Log("Hit " + gameObject.name);
         if (hp <= 0)
-            Destroy(gameObject);
+            if (gameObject.name != "Player")
+                Destroy(gameObject);
+            else
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         if (damageIndicator != null)
         {
             indicatorDuration = indicatorDurationMax;

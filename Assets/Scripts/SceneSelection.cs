@@ -19,6 +19,8 @@ public class SceneSelection : MonoBehaviour
                     SceneManager.LoadScene(0);
                 if (scene.collider.name == "Sphere")
                     SceneManager.LoadScene(2);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
         }
     }

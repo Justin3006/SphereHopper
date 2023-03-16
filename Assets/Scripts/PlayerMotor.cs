@@ -21,6 +21,11 @@ public class PlayerMotor : Vulnerable
     float camRotSpeed = 360;
     float camRotDir;
 
+    bool grounded;
+    [SerializeField]
+    float untilUngroundedMax = 0.25f;
+    float untilUngrounded;
+
     [SerializeField]
     float jumpPower = 7.5f;
     bool jump;
@@ -35,7 +40,7 @@ public class PlayerMotor : Vulnerable
     float dashCD;
     bool dash;
 
-    bool walk;
+    bool walking;
 
     float movLockTime;
 
@@ -85,7 +90,21 @@ public class PlayerMotor : Vulnerable
         if (movLockTime <= 0)
         {
             // move position
-            rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * movSpeed * movDir));
+            float dist = Time.fixedDeltaTime * movSpeed;
+            Vector3 desPos = transform.position + dist * movDir;
+            if (walking && !Physics.Raycast(desPos, -transform.up, dist))
+            {
+                Collider[] coll = Physics.OverlapSphere((desPos + transform.position) / 2, 0.05f + dist / 2);
+                foreach (Collider c in coll) 
+                {
+                    if (c.gameObject.name != "player")
+                    {
+                        
+                        desPos = c.ClosestPoint(desPos);
+                    }
+                }
+            }
+            rb.MovePosition(desPos);
 
             // rotate body
             // TODO: Change Rotate to Lerp for smoother controlls
@@ -104,6 +123,11 @@ public class PlayerMotor : Vulnerable
                 cam.transform.Rotate(camRotChange, 0, 0);
 
             // jump
+            if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+                grounded = true;
+            else if(untilUngrounded <= 0)
+                untilUngrounded = untilUngroundedMax;
+
             if (jump)
             {
                 rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
@@ -122,7 +146,7 @@ public class PlayerMotor : Vulnerable
         // Handle continuation of dash.
         if (dashDuration > 0)
         {
-            rb.MovePosition(transform.position + transform.rotation * (Time.fixedDeltaTime * dashSpeed * movDir));
+            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * movDir);
             dashDuration -= Time.fixedDeltaTime;
         }
 
@@ -175,6 +199,13 @@ public class PlayerMotor : Vulnerable
 
 
         // Handle cooldowns.
+        if (untilUngrounded > 0) 
+        {
+            untilUngrounded -= Time.fixedDeltaTime;
+            if (untilUngrounded <= 0)
+                grounded = false;
+        }
+
         if (dashCD > 0) 
         {
             dashCD -= Time.fixedDeltaTime;
@@ -208,7 +239,7 @@ public class PlayerMotor : Vulnerable
 
     public void Move(Vector3 movDir)
     {
-        this.movDir = movDir;
+        this.movDir = transform.rotation * movDir;
     }
 
     public void Rotate(float rotDir) 
@@ -223,7 +254,7 @@ public class PlayerMotor : Vulnerable
 
     public void Jump() 
     {
-        if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+        if (grounded)
             jump = true;
     }
 
@@ -235,11 +266,11 @@ public class PlayerMotor : Vulnerable
 
     public void Walk() 
     {
-        if (!walk)
+        if (!walking)
             movSpeed /= 1.9f;
         else
             movSpeed *= 1.9f;
-        walk = !walk;
+        walking = !walking;
     }
 
     public void Attack()

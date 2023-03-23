@@ -26,7 +26,8 @@ public class ProtoProjectile : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (!other.gameObject.GetComponent<Vulnerable>().Hit())
+        Vulnerable vul = other.gameObject.GetComponent<Vulnerable>();
+        if (vul != null && !other.gameObject.GetComponent<Vulnerable>().Hit(transform.position))
             direction *= -1;
     }
 }

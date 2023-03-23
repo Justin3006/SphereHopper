@@ -39,9 +39,9 @@ public class Vulnerable : MonoBehaviour
         handleDmgIndicator();
     }
 
-    public bool Hit() 
+    public virtual bool Hit(Vector3 origin) 
     {
-        if (shielded)
+        if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
         {
             shieldedAttacks++;
             if (damageIndicator != null)

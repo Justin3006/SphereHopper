@@ -67,7 +67,5 @@ public class PlayerController : MonoBehaviour
         //Handle Interactions
         if (Input.GetButtonDown("Interact"))
             motor.Interact();
-
-        //TODO: other actions like inventory, etc.
     }
 }

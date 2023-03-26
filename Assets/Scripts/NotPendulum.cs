@@ -19,7 +19,7 @@ public class NotPendulum : MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         Vulnerable vul = other.gameObject.GetComponent<Vulnerable>();
-        if (vul != null && !other.gameObject.GetComponent<Vulnerable>().Hit(transform.position))
+        if (vul != null && !other.gameObject.GetComponent<Vulnerable>().Hit(transform.position, 1, 0.1f))
             direction *= -1;
     }
 }

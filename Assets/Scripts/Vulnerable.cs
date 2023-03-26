@@ -39,7 +39,7 @@ public class Vulnerable : MonoBehaviour
         handleDmgIndicator();
     }
 
-    public virtual bool Hit(Vector3 origin) 
+    public virtual bool Hit(Vector3 origin, float impact, float stun) 
     {
         if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
         {

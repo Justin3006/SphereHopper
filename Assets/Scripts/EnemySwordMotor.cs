@@ -21,10 +21,22 @@ public class EnemySwordMotor : Vulnerable
     [SerializeField]
     float movementChangeProbabilityZ = 0.3f;
     [SerializeField]
+    int movementZDurationMax = 1;
+    int movementZDuration;
+    [SerializeField]
+    bool movementZContinue = true;
+    [SerializeField]
     float movementChangeProbabilityX = 0.1f;
     [SerializeField]
     int movementXDurationMax = 5;
     int movementXDuration;
+    [SerializeField]
+    bool movementXContinue = false;
+
+    float movLockTime;
+
+    Vector3 displacementDir;
+    float dicplacementTime;
 
     Vector3 lastMovDir;
 
@@ -60,13 +72,13 @@ public class EnemySwordMotor : Vulnerable
         rb = GetComponent<Rigidbody>();
         lastMovDir = new Vector3(0, 0, 0);
         hp = maxHp;
-       //TODO: Random.InitState(integer);
+        Random.InitState(System.DateTime.Now.Millisecond);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        //Set up variables
+        // Set up variables
         Vector3 playerPosition = PlayerManager.GetTransform().position;
         Vector3 toPlayer = playerPosition - this.transform.position;
         Vector3 movDir = Quaternion.Inverse(transform.rotation) * toPlayer;
@@ -91,17 +103,30 @@ public class EnemySwordMotor : Vulnerable
 
                     // Calculate fitting movement in z direction
                     float rand = Random.Range(0f, 1f);
-                    if (rand < movementChangeProbabilityZ)
+                    if (movementZDuration <= 0)
                     {
-                        float rand2 = dist / ATTACK_RANGE - 1 + Random.Range(-1f, 1f);
-                        if (Mathf.Abs(rand2) <= 0.33f)
-                            movDirZ = 0;
+                        if (rand < movementChangeProbabilityZ)
+                        {
+                            // Try moving around attack range
+                            float rand2 = dist / ATTACK_RANGE - 1 + Random.Range(-1f, 1f);
+                            if (Mathf.Abs(rand2) <= 0.33f)
+                                movDirZ = 0;
+                            else
+                                movDirZ = (int)Mathf.Sign(rand2);
+                            movementZDuration = movementZDurationMax;
+                        }
                         else
-                            movDirZ = (int) Mathf.Sign(rand2);
+                        {
+                            if (movementZContinue)
+                                movDirZ = (int)lastMovDir.z;
+                            else
+                                movDirZ = 0;
+                        }
                     }
                     else 
                     {
-                        movDirZ = (int) lastMovDir.z;
+                        movDirZ = (int)lastMovDir.z;
+                        movementZDuration--;
                     }
 
                     // Calculate fitting movement in x direction
@@ -115,7 +140,10 @@ public class EnemySwordMotor : Vulnerable
                         }
                         else
                         {
-                            movDirX = 0;
+                            if (movementXContinue)
+                                movDirX = (int)lastMovDir.x;
+                            else
+                                movDirX = 0;
                         }
                     }
                     else
@@ -165,7 +193,7 @@ public class EnemySwordMotor : Vulnerable
             }
         }
 
-        //attack
+        // Attack
         if (attackDuration > 0)
         {
             attackDuration -= Time.deltaTime;
@@ -173,13 +201,13 @@ public class EnemySwordMotor : Vulnerable
             {
                 if (dist <= ATTACK_RANGE)
                 {
-                    PlayerManager.GetMotor().Hit(transform.position);
+                    PlayerManager.GetMotor().Hit(transform.position, 1, 0.1f);
                 }
                 weaponGFX.transform.localEulerAngles = new Vector3(75, 0, 0);
             }
         }
 
-        //parry
+        // Parry
         if (parryDuration > 0)
         {
             parryDuration -= Time.deltaTime;
@@ -209,7 +237,7 @@ public class EnemySwordMotor : Vulnerable
         }
     }
 
-    public override bool Hit(Vector3 origin)
+    public override bool Hit(Vector3 origin, float impact, float stun)
     {
         if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
         {
@@ -222,7 +250,7 @@ public class EnemySwordMotor : Vulnerable
             Destroy(gameObject);
         attackDuration = 0;
         weaponGFX.transform.localEulerAngles = new Vector3(0, 0, 0);
-        transform.Translate(0, 0, -0.5f);
+        transform.Translate(0, 0, impact);
             
         return true;
     }

@@ -151,11 +151,11 @@ public class PlayerMotor : Vulnerable
         }
 
 
-        //Handle execution of combat actions.
+        // Handle execution of combat actions.
         RaycastHit hit;
         Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 2.5f);
 
-        //distance indicator
+        // distance indicator
         float distancePercent = 0;
         if (hit.collider != null && hit.collider.gameObject.GetComponent<Vulnerable>() != null)
         {
@@ -163,7 +163,7 @@ public class PlayerMotor : Vulnerable
         }
         distanceIndicator.GetComponent<RectTransform>().localScale = new Vector3(distancePercent, distancePercent, 1);
 
-        //attack
+        // attack
         if (attackDuration > 0) 
         {
             attackDuration -= Time.deltaTime;
@@ -175,14 +175,15 @@ public class PlayerMotor : Vulnerable
                     if (target != null)
                     {
                         hitIndicator.SetActive(true);
-                        target.Hit(transform.position);
+                        //TODO: Parametrize
+                        target.Hit(transform.position, 1, 0.1f);
                     }
                 }
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
         }
 
-        //parry
+        // parry
         if (parryDuration > 0)
         {
             parryDuration -= Time.deltaTime;
@@ -296,7 +297,6 @@ public class PlayerMotor : Vulnerable
 
     public void Interact() 
     {
-        //TODO: handle in FixedUpdate?
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE))
         {

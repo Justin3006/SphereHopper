@@ -45,13 +45,20 @@ public class PlayerController : MonoBehaviour
             motor.Walk();
 
 
-        //Handle combat.
+        // Handle combat.
         if (Input.GetButtonDown("Fire1"))
             motor.Attack();
         else if (Input.GetButtonDown("Fire2"))
             motor.Parry();
 
-        //Handle Abilities
+        // Handle Lock On.
+        //TODO: Replace with generic Input Button
+        if (Input.GetKeyDown(KeyCode.Tab)) 
+        {
+            motor.LockOn();
+        }
+
+        // Handle Abilities.
         if (Input.GetButtonDown("Ability")) 
         {
             motor.ActivateAbility();
@@ -64,7 +71,7 @@ public class PlayerController : MonoBehaviour
             motor.SwitchAbility(-1);
 
 
-        //Handle Interactions
+        // Handle Interactions.
         if (Input.GetButtonDown("Interact"))
             motor.Interact();
     }

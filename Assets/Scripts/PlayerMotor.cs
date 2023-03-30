@@ -59,6 +59,11 @@ public class PlayerMotor : Vulnerable
 
     const float ATTACK_RANGE = 3;
 
+    [SerializeField]
+    float lockOnRange = 15;
+    //TODO: change "Vulnerable" to something more suitable
+    Vulnerable lockOnTarget;
+
 
     int[,] equippedAbilities = { { 0, 3 }, { 3, 3 }, { 2, 3 } };
     int selectedAbility;
@@ -108,19 +113,24 @@ public class PlayerMotor : Vulnerable
 
             // rotate body
             // TODO: Change Rotate to Lerp for smoother controlls
-            transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
+            if (lockOnTarget == null)
+            {
+                transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
 
-            // rotate cam 
-            float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
-            float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
 
-            if (newCamRot < 270 && newCamRot >= 180)
-                cam.transform.LookAt(cam.transform.position + transform.up, -transform.forward);
-            else if (newCamRot > 90 && newCamRot < 180)
-                cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
-            else
-                //TODO: Change Rotate to Lerp for smoother controlls
-                cam.transform.Rotate(camRotChange, 0, 0);
+                // rotate cam 
+                float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
+                float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
+
+                if (newCamRot < 270 && newCamRot >= 180)
+                    cam.transform.LookAt(cam.transform.position + transform.up, -transform.forward);
+                else if (newCamRot > 90 && newCamRot < 180)
+                    cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
+                else
+                    //TODO: Change Rotate to Lerp for smoother controlls
+                    cam.transform.Rotate(camRotChange, 0, 0);
+            }
+            
 
             // jump
             if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
@@ -198,6 +208,13 @@ public class PlayerMotor : Vulnerable
             }
         }
 
+        // Handle Lock On
+        // TODO: Fix compatibility with dash
+        if (lockOnTarget != null)
+        {
+            cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
+            transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
+        }
 
         // Handle cooldowns.
         if (untilUngrounded > 0) 
@@ -292,6 +309,19 @@ public class PlayerMotor : Vulnerable
             swordCD = parryCDMax;
             parryDuration = parryDurationMax;
             swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, 200, 0);
+        }
+    }
+
+    public void LockOn() 
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, lockOnRange))
+        {
+            Vulnerable newTarget = hit.collider.gameObject.GetComponent<Vulnerable>();
+            if(newTarget != lockOnTarget)
+                lockOnTarget = newTarget;
+            else
+                lockOnTarget = null;
         }
     }
 

@@ -2061,8 +2061,11 @@ MonoBehaviour:
   rotSpeed: 360
   movementChangeCDMax: 0.05
   movementChangeProbabilityZ: 0.15
+  movementZDurationMax: 1
+  movementZContinue: 1
   movementChangeProbabilityX: 0.05
   movementXDurationMax: 10
+  movementXContinue: 0
   attackCDMax: 0.8
   attackDurationMax: 0.4
   parryCDMax: 0.75
@@ -2988,7 +2991,7 @@ Transform:
   m_GameObject: {fileID: 1342820689}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: 0.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1062910471}
@@ -3020,7 +3023,7 @@ Transform:
   m_GameObject: {fileID: 1482734869}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: 0.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 67421278}
@@ -3277,8 +3280,11 @@ MonoBehaviour:
   rotSpeed: 360
   movementChangeCDMax: 0.05
   movementChangeProbabilityZ: 0.15
+  movementZDurationMax: 1
+  movementZContinue: 1
   movementChangeProbabilityX: 0.05
   movementXDurationMax: 10
+  movementXContinue: 0
   attackCDMax: 0.8
   attackDurationMax: 0.4
   parryCDMax: 0.75
@@ -3575,8 +3581,11 @@ MonoBehaviour:
   rotSpeed: 360
   movementChangeCDMax: 0.05
   movementChangeProbabilityZ: 0.15
+  movementZDurationMax: 1
+  movementZContinue: 1
   movementChangeProbabilityX: 0.05
   movementXDurationMax: 10
+  movementXContinue: 0
   attackCDMax: 0.8
   attackDurationMax: 0.4
   parryCDMax: 0.75
@@ -4602,7 +4611,7 @@ Transform:
   m_GameObject: {fileID: 2040422864}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0, z: 0.25}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1581545608}
@@ -5021,6 +5030,10 @@ PrefabInstance:
     - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: attackCDMax
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: attackImpact
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: hitIndicator

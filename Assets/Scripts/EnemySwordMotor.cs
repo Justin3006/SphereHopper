@@ -250,7 +250,7 @@ public class EnemySwordMotor : Vulnerable
             Destroy(gameObject);
         attackDuration = 0;
         weaponGFX.transform.localEulerAngles = new Vector3(0, 0, 0);
-        transform.Translate(0, 0, impact);
+        transform.Translate(0, 0, -impact);
             
         return true;
     }

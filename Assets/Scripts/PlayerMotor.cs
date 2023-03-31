@@ -209,12 +209,15 @@ public class PlayerMotor : Vulnerable
         }
 
         // Handle Lock On
-        // TODO: Fix compatibility with dash
+        // TODO: Fix keeping the correct distance to the locked on target when moving sideways as well as compatibility with dash (possibly the same thing)
         if (lockOnTarget != null)
         {
+            float prev_y = cam.transform.eulerAngles.y;
             cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
             transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
+            movDir = Quaternion.Euler(0, cam.transform.eulerAngles.y - prev_y, 0) * movDir;
         }
+
 
         // Handle cooldowns.
         if (untilUngrounded > 0) 
@@ -257,7 +260,8 @@ public class PlayerMotor : Vulnerable
 
     public void Move(Vector3 movDir)
     {
-        this.movDir = transform.rotation * movDir;
+        if (movLockTime <= 0)
+            this.movDir = transform.rotation * movDir;
     }
 
     public void Rotate(float rotDir) 

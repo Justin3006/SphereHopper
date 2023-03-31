@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
             motor.Parry();
 
         // Handle Lock On.
-        //TODO: Replace with generic Input Button
+        //TODO: Replace with generic Button Input
         if (Input.GetKeyDown(KeyCode.Tab)) 
         {
             motor.LockOn();

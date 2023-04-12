@@ -42,7 +42,7 @@ public class PlayerMotor : Vulnerable
 
     bool walking;
 
-    float movLockTime;
+    float movLockTime = 0;
 
 
     [SerializeField]
@@ -65,7 +65,7 @@ public class PlayerMotor : Vulnerable
     Vulnerable lockOnTarget;
 
 
-    int[,] equippedAbilities = { { 0, 3 }, { 3, 3 }, { 2, 3 } };
+    IAbility[] equippedAbilities = new IAbility[3];
     int selectedAbility;
     
 
@@ -86,6 +86,9 @@ public class PlayerMotor : Vulnerable
         rb = GetComponent<Rigidbody>();
         cam = GetComponentInChildren<Camera>();
         hp = maxHp;
+        equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
+        equippedAbilities[1] = gameObject.AddComponent<AbilityPlaceholder>();
+        equippedAbilities[2] = gameObject.AddComponent<AbilityPlaceholder>();
     }
 
     // Update is called once per frame
@@ -186,7 +189,7 @@ public class PlayerMotor : Vulnerable
                     {
                         hitIndicator.SetActive(true);
                         //TODO: Parametrize
-                        target.Hit(transform.position, 1, 0.1f);
+                        target.Hit(transform.position, 10, 0.025f);
                     }
                 }
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
@@ -340,47 +343,17 @@ public class PlayerMotor : Vulnerable
         }
     }
 
-    private void IntToAbility(int ability) 
-    {
-        switch (ability) 
-        {
-            case 0: PlaceHolderAbility1(); break;
-            case 1: Debug.Log("Ability 1"); break;
-            case 2: PlaceHolderAbility2(); break;
-            case 3: PlaceHolderAbility3(); break;
-        }
-    }
-
     public void ActivateAbility()
     {
-        if (equippedAbilities[selectedAbility, 1] > 0)
-        {
-            equippedAbilities[selectedAbility, 1]--;
-            IntToAbility(equippedAbilities[selectedAbility, 0]);
-            abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility, 1] + " uses left\n Ability " + equippedAbilities[selectedAbility, 0];
-        }
+        equippedAbilities[selectedAbility].Use();
+        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left\n Ability " + selectedAbility;
     }
 
-    public void SwitchAbility(int dir) 
+    public void SwitchAbility(int dir)
     {
         selectedAbility = (selectedAbility + dir) % equippedAbilities.GetLength(0);
         if (selectedAbility < 0)
             selectedAbility = equippedAbilities.GetLength(0) - 1;
-        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility, 1] + " uses left\n Ability " + equippedAbilities[selectedAbility, 0];
-    }
-
-    public void PlaceHolderAbility1() 
-    {
-        rb.AddForce(0,5000,0);
-    }
-
-    public void PlaceHolderAbility2()
-    {
-        transform.Rotate(0,180,0);
-    }
-
-    public void PlaceHolderAbility3()
-    {
-        rb.AddForce(100, 100, 100);
+        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left\n Ability " + selectedAbility;
     }
 }

@@ -18,6 +18,10 @@ public class Vulnerable : MonoBehaviour
     float indicatorDurationMax = 0.2f;
     float indicatorDuration;
 
+    [SerializeField]
+    bool executeImmunity;
+    float executePercentage = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -53,18 +57,35 @@ public class Vulnerable : MonoBehaviour
             return false;
         }
 
-        hp--;
-        if (hp <= 0)
-            if (gameObject.name != "Player")
-                Destroy(gameObject);
-            else
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         if (damageIndicator != null)
         {
             indicatorDuration = indicatorDurationMax;
             damageIndicator.GetComponent<Image>().color = Color.red;
             damageIndicator.SetActive(true);
         }
+
+        hp--;
+        if (hp <= 0)
+            Kill();
+        
         return true;
+    }
+
+    public void Execute(float addPercentage) 
+    {
+        if (executeImmunity)
+            return;
+
+        executePercentage += addPercentage;
+        if (executePercentage >= 100)
+            Kill();
+    }
+
+    private void Kill()
+    {
+        if (gameObject.name != "Player")
+            Destroy(gameObject);
+        else
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

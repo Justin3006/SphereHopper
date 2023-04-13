@@ -6,7 +6,6 @@ public class PlayerManager : MonoBehaviour
 {
     private static GameObject player;
     
-    // Start is called before the first frame update
     void Start()
     {
         player = this.gameObject;
@@ -20,5 +19,10 @@ public class PlayerManager : MonoBehaviour
     public static PlayerMotor GetMotor() 
     {
         return player.GetComponent<PlayerMotor>();
+    }
+
+    public static Rigidbody GetRigidbody() 
+    {
+        return player.GetComponent<Rigidbody>();
     }
 }

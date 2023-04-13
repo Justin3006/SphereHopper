@@ -44,6 +44,9 @@ public class PlayerMotor : Vulnerable
 
     float movLockTime = 0;
 
+    Vector3 targetLocation;
+    float speedToTarget;
+
 
     [SerializeField]
     float attackCDMax = 0.4f;
@@ -87,7 +90,7 @@ public class PlayerMotor : Vulnerable
         cam = GetComponentInChildren<Camera>();
         hp = maxHp;
         equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
-        equippedAbilities[1] = gameObject.AddComponent<AbilityPlaceholder>();
+        equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
         equippedAbilities[2] = gameObject.AddComponent<AbilityPlaceholder>();
     }
 
@@ -161,6 +164,24 @@ public class PlayerMotor : Vulnerable
         {
             rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * movDir);
             dashDuration -= Time.fixedDeltaTime;
+        }
+
+        //Handle moving toward a target location.
+        if (speedToTarget != 0)
+        {
+            Vector3 diff = targetLocation - transform.position;
+            Vector3 newPos = transform.position + speedToTarget * Time.fixedDeltaTime * (diff).normalized;
+            if (diff.magnitude <= (newPos - transform.position).magnitude)
+            {
+                rb.MovePosition(targetLocation);
+                movLockTime = 0;
+                speedToTarget = 0;
+            }
+            else
+            {
+                rb.MovePosition(transform.position + newPos);
+                movLockTime = Time.fixedDeltaTime * 2;
+            }
         }
 
 
@@ -355,5 +376,19 @@ public class PlayerMotor : Vulnerable
         if (selectedAbility < 0)
             selectedAbility = equippedAbilities.GetLength(0) - 1;
         abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left\n Ability " + selectedAbility;
+    }
+
+    //TODO: delete this method and everyting connected to it (except movLockTime)
+    //obsolete
+    public void MoveToTarget(Vector3 target, float speed) 
+    {
+        targetLocation = target;
+        speedToTarget = speed;
+        movLockTime = Time.fixedDeltaTime * 2;
+    }
+
+    public void LockMovement(float time) 
+    {
+        movLockTime = time;
     }
 }

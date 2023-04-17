@@ -21,6 +21,8 @@ public class PlayerMotor : Vulnerable
     float camRotSpeed = 360;
     float camRotDir;
 
+    float generalSpeedModifier = 1;
+
     bool grounded;
     [SerializeField]
     float untilUngroundedMax = 0.25f;
@@ -53,6 +55,11 @@ public class PlayerMotor : Vulnerable
     [SerializeField]
     float attackDurationMax = 0.1f;
     float attackDuration;
+    const float attackImpact = 10;
+    float attackImpactModifier = 1;
+    const float attackStun = 0.025f;
+    float attackStunModifier = 1;
+
     [SerializeField]
     float parryCDMax = 0.5f;
     [SerializeField]
@@ -91,7 +98,7 @@ public class PlayerMotor : Vulnerable
         hp = maxHp;
         equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
         equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
-        equippedAbilities[2] = gameObject.AddComponent<AbilityPlaceholder>();
+        equippedAbilities[2] = gameObject.AddComponent<AbilityGear>();
     }
 
     // Update is called once per frame
@@ -101,7 +108,7 @@ public class PlayerMotor : Vulnerable
         if (movLockTime <= 0)
         {
             // move position
-            float dist = Time.fixedDeltaTime * movSpeed;
+            float dist = Time.fixedDeltaTime * movSpeed * generalSpeedModifier;
             Vector3 desPos = transform.position + dist * movDir;
             if (walking && !Physics.Raycast(desPos, -transform.up, dist))
             {
@@ -162,7 +169,7 @@ public class PlayerMotor : Vulnerable
         // Handle continuation of dash.
         if (dashDuration > 0)
         {
-            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * movDir);
+            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * generalSpeedModifier * movDir);
             dashDuration -= Time.fixedDeltaTime;
         }
 
@@ -209,8 +216,7 @@ public class PlayerMotor : Vulnerable
                     if (target != null)
                     {
                         hitIndicator.SetActive(true);
-                        //TODO: Parametrize
-                        target.Hit(transform.position, 10, 0.025f);
+                        target.Hit(transform.position, attackImpactModifier * attackImpact, attackStunModifier * attackStun);
                     }
                 }
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
@@ -390,5 +396,18 @@ public class PlayerMotor : Vulnerable
     public void LockMovement(float time) 
     {
         movLockTime = time;
+    }
+
+    public void SetGeneralSpeedModifier(float modifier) 
+    {
+        generalSpeedModifier = modifier;
+    }
+    public void SetAttackImpactModifier(float modifier) 
+    {
+        attackImpactModifier = modifier;
+    }
+    public void SetAttackStunModifier(float modifier) 
+    {
+        attackStunModifier = modifier;
     }
 }

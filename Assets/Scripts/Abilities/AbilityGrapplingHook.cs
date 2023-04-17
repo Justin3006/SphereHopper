@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class AbilityGrapplingHook : MonoBehaviour, IAbility
 {
-    int usesMax = 10;
+    const int usesMax = 10;
     int usesRemaining;
     float abilityUseTimeRemaining;
 
     Vector3 targetLocation;
     Rigidbody rb;
-    float range = 25;
-    float speed = 25;
+    const float range = 25;
+    const float speed = 25;
 
     public int GetUsesMax()
     {

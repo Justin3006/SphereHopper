@@ -67,9 +67,11 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             Vector3 diff = targetLocation - Camera.main.transform.position;
             Vector3 newPos = PlayerManager.GetTransform().position + speed * Time.fixedDeltaTime * (diff).normalized;
             rb.MovePosition(newPos);
-            if (diff.magnitude <= 2)
+            
+            if (diff.magnitude <= 1.5f)
             {
                 rb.useGravity = true;
+                abilityUseTimeRemaining = 0;
             }
          }
     }

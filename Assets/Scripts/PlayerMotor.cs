@@ -49,6 +49,9 @@ public class PlayerMotor : Vulnerable
 
     [SerializeField]
     float lockOnRange = 15;
+    [SerializeField]
+    private float unlockThreshold = 30f; // Horizontal angle threshold to unlock the target
+
     //TODO: change "Vulnerable" to something more suitable
     Vulnerable lockOnTarget;
 
@@ -185,6 +188,15 @@ public class PlayerMotor : Vulnerable
         }
         distanceIndicator.GetComponent<RectTransform>().localScale = new Vector3(distancePercent, distancePercent, 1);
 
+        if (lockOnTarget != null)
+        {
+            float distanceToTarget = Vector3.Distance(cam.transform.position, lockOnTarget.transform.position);
+            if (distanceToTarget > lockOnRange)
+            {
+                lockOnTarget = null;
+            }
+        }
+        
         // attack
         if (attackDuration > 0) 
         {
@@ -268,6 +280,8 @@ public class PlayerMotor : Vulnerable
         //SUBSECTION: Reset Notifications
         jump = false;
         dash = false;
+
+
     }
 
 
@@ -309,19 +323,31 @@ public class PlayerMotor : Vulnerable
             movSpeed *= 1.9f;
         walking = !walking;
     }
-
+    //TODO: Allow vertical movement while locked on and make it span of if mouse is moved
     public void LockOn()
     {
-        //TODO: replace raycast with different function, that allows you to lock on to targets, that you aren't directly looking at
+        if (lockOnTarget != null)
+        {
+            lockOnTarget = null;
+            return;
+        }
+        
         RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, lockOnRange))
+
+        // Raycast from the camera's position, only in the horizontal direction.
+        Vector3 horizontalDirection = new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z).normalized;
+                
+        if (Physics.Raycast(cam.transform.position, horizontalDirection, out hit, lockOnRange))
         {
             Vulnerable newTarget = hit.collider.gameObject.GetComponent<Vulnerable>();
+
             if (newTarget != lockOnTarget)
+            {
                 lockOnTarget = newTarget;
-            else
-                lockOnTarget = null;
+            }
+            
         }
+                
     }
 
     //SUBSECTION: Combat

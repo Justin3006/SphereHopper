@@ -9,6 +9,7 @@ public class PlayerMotor : Vulnerable
     Rigidbody rb;
     Camera cam;
 
+    //SECTION: Movement Attributes
     [SerializeField]
     float movSpeed = 7;
     Vector3 movDir;
@@ -46,7 +47,13 @@ public class PlayerMotor : Vulnerable
 
     float movLockTime = 0;
 
+    [SerializeField]
+    float lockOnRange = 15;
+    //TODO: change "Vulnerable" to something more suitable
+    Vulnerable lockOnTarget;
 
+
+    //SECTION: Melee Combat Attributes
     [SerializeField]
     float attackCDMax = 0.4f;
     [SerializeField]
@@ -66,16 +73,11 @@ public class PlayerMotor : Vulnerable
 
     const float ATTACK_RANGE = 3;
 
-    [SerializeField]
-    float lockOnRange = 15;
-    //TODO: change "Vulnerable" to something more suitable
-    Vulnerable lockOnTarget;
-
-
     IAbility[] equippedAbilities = new IAbility[3];
     int selectedAbility;
     
 
+    //SECTION: UI Attributes
     [SerializeField]
     GameObject distanceIndicator;
     [SerializeField]
@@ -87,7 +89,8 @@ public class PlayerMotor : Vulnerable
     [SerializeField]
     GameObject abilityText;
 
-    // Start is called before the first frame update
+
+    //SECTION: Initialization
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -99,10 +102,10 @@ public class PlayerMotor : Vulnerable
         abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesMax() + " uses left";
     }
 
-    // Update is called once per frame
+    //SECTION: Regular Updates
     void FixedUpdate()
     {
-        // Handle direct inputs.
+        //SUBSECTION: Direct Inputs
         if (movLockTime <= 0)
         {
             // move position
@@ -123,11 +126,10 @@ public class PlayerMotor : Vulnerable
             rb.MovePosition(desPos);
 
             // rotate body
-            // TODO: Change Rotate to Lerp for smoother controlls
+            //TODO: Change Rotate to Lerp for smoother controlls
             if (lockOnTarget == null)
             {
                 transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
-
 
                 // rotate cam 
                 float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
@@ -142,7 +144,6 @@ public class PlayerMotor : Vulnerable
                     cam.transform.Rotate(camRotChange, 0, 0);
             }
             
-
             // jump
             if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
                 grounded = true;
@@ -164,7 +165,7 @@ public class PlayerMotor : Vulnerable
             }
         }
 
-        // Handle continuation of dash.
+        //SUBSECTION: Dash
         if (dashDuration > 0)
         {
             rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * generalSpeedModifier * movDir);
@@ -172,7 +173,7 @@ public class PlayerMotor : Vulnerable
         }
 
 
-        // Handle execution of combat actions.
+        //SUBSECTION: Combat Actions
         RaycastHit hit;
         Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE * 2.5f);
 
@@ -219,8 +220,8 @@ public class PlayerMotor : Vulnerable
         }
 
 
-        // Handle Lock On
-        // TODO: Fix keeping the correct distance to the locked on target when moving sideways as well as compatibility with dash (possibly the same thing)
+        //SUBSECTION: Lock On
+        //TODO: Fix keeping the correct distance to the locked on target when moving sideways as well as compatibility with dash (possibly the same thing)
         if (lockOnTarget != null)
         {
             float prev_y = cam.transform.eulerAngles.y;
@@ -230,7 +231,7 @@ public class PlayerMotor : Vulnerable
         }
 
 
-        // Handle cooldowns.
+        //SUBSECTION: Cooldowns
         if (untilUngrounded > 0) 
         {
             untilUngrounded -= Time.fixedDeltaTime;
@@ -264,12 +265,14 @@ public class PlayerMotor : Vulnerable
 
         handleDmgIndicator();
 
-        // Reset notifications.
+        //SUBSECTION: Reset Notifications
         jump = false;
         dash = false;
     }
 
-    // Inputs
+
+    //SECTION: Inputs
+    //SUBSECTION: Movement
     public void Move(Vector3 movDir)
     {
         if (movLockTime <= 0)
@@ -307,6 +310,21 @@ public class PlayerMotor : Vulnerable
         walking = !walking;
     }
 
+    public void LockOn()
+    {
+        //TODO: replace raycast with different function, that allows you to lock on to targets, that you aren't directly looking at
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, lockOnRange))
+        {
+            Vulnerable newTarget = hit.collider.gameObject.GetComponent<Vulnerable>();
+            if (newTarget != lockOnTarget)
+                lockOnTarget = newTarget;
+            else
+                lockOnTarget = null;
+        }
+    }
+
+    //SUBSECTION: Combat
     public void Attack()
     {
         foreach (IAbility a in equippedAbilities)
@@ -340,31 +358,6 @@ public class PlayerMotor : Vulnerable
         }
     }
 
-    public void LockOn() 
-    {
-        //TODO: replace raycast with different function, that allows you to lock on to targets, that you aren't directly looking at
-        RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, lockOnRange))
-        {
-            Vulnerable newTarget = hit.collider.gameObject.GetComponent<Vulnerable>();
-            if(newTarget != lockOnTarget)
-                lockOnTarget = newTarget;
-            else
-                lockOnTarget = null;
-        }
-    }
-
-    public void Interact() 
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE))
-        {
-            Transporter t = hit.collider.gameObject.GetComponent<Transporter>();
-            if (t != null)
-                t.Interact();
-        }
-    }
-
     public void ActivateAbility()
     {
         foreach (IAbility a in equippedAbilities)
@@ -388,8 +381,20 @@ public class PlayerMotor : Vulnerable
         abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left";
     }
 
+    //SUBSECTION: Misceallaneous
+    public void Interact()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE))
+        {
+            Transporter t = hit.collider.gameObject.GetComponent<Transporter>();
+            if (t != null)
+                t.Interact();
+        }
+    }
 
-    // Support Methods
+
+    //SECTION: Support Methods
     public void LockMovement(float time) 
     {
         movLockTime = time;

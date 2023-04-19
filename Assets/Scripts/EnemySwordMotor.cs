@@ -7,6 +7,7 @@ public class EnemySwordMotor : Vulnerable
 {
     Rigidbody rb;
 
+    //SECTION: Movement Attributes
     [SerializeField]
     float movSpeed = 5;
     [SerializeField]
@@ -39,6 +40,8 @@ public class EnemySwordMotor : Vulnerable
 
     Vector3 lastMovDir;
 
+    
+    //SECTION: Combat Attributes
     [SerializeField]
     float attackCDMax = 0.4f;
     [SerializeField]
@@ -57,6 +60,9 @@ public class EnemySwordMotor : Vulnerable
     float parryProbability = 0.25f;
 
     const float ATTACK_RANGE = 3;
+
+
+    //SECTION: Miscellaneous Attributes
     const float ACTIVE_RANGE = 7;
     const float VISION_RANGE = 15;
 
@@ -64,8 +70,7 @@ public class EnemySwordMotor : Vulnerable
     GameObject weaponGFX;
 
 
-
-    // Start is called before the first frame update
+    //SECTION: Initialization
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -74,9 +79,10 @@ public class EnemySwordMotor : Vulnerable
         Random.InitState(System.DateTime.Now.Millisecond);
     }
 
-    // Update is called once per frame
+    //SECTION: Regular Updates
     void FixedUpdate()
     {
+        //SUBSECTION: Action calculation and execution
         if (movLockTime <= 0)
         {
 
@@ -226,11 +232,11 @@ public class EnemySwordMotor : Vulnerable
 
         }
 
-        //Handle displacement
+        //SUBSECTION: Displacement
         if(displacement != Vector3.zero)
             rb.MovePosition(transform.position + Time.fixedDeltaTime * displacement);
 
-        // Handle Cooldowns
+        //SUBSECTION: Cooldowns
         if (movementChangeCD > 0)
         {
             movementChangeCD -= Time.fixedDeltaTime;
@@ -251,6 +257,8 @@ public class EnemySwordMotor : Vulnerable
         }
     }
 
+
+    //SECTION: Support Methods
     public override bool Hit(Vector3 origin, float impact, float stun)
     {
         if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
@@ -262,11 +270,9 @@ public class EnemySwordMotor : Vulnerable
         hp--;
         if (hp <= 0)
             Destroy(gameObject);
-        attackDuration = 0;
-        weaponGFX.transform.localEulerAngles = new Vector3(0, 0, 0);
 
-        //transform.Translate(0, 0, -impact);
         movLockTime = stun;
+        //TODO: should probably be replaced by rb.velocity stuff or rb.AddForce(x,y,z)
         displacement = impact * (transform.position - origin).normalized;
             
         return true;

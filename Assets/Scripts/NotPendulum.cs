@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class NotPendulum : MonoBehaviour
 {
+    //TODO: It currently rotates together with the object it's attached to, but it shouldn't
+    //TODO: Also, please find a better name!
     [SerializeField]
     int direction = 1;
     [SerializeField]

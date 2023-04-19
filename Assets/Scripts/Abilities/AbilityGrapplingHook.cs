@@ -16,6 +16,8 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     GameObject targetCharacter;
     Vector3 targetCharacterOriginalPosition;
 
+    [SerializeField] private float knockbackForce = 20f;    
+
     public string GetName()
     {
         return "Grapplinghook";
@@ -56,6 +58,14 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             {
                 targetCharacter = hit.collider.gameObject;
                 targetCharacterOriginalPosition = targetCharacter.transform.position;
+
+                // Apply knockback force to the target character
+                Rigidbody targetRb = targetCharacter.GetComponent<Rigidbody>();
+                if (targetRb != null && !targetCharacter.CompareTag("Player"))
+                {
+                    Vector3 knockbackDirection = (targetCharacter.transform.position - Camera.main.transform.position).normalized;
+                    targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
+                }
             }
         }
 
@@ -95,5 +105,10 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
                 targetCharacter = null;
             }
          }
+    }
+
+    public void SetKnockbackForce(float force)
+    {
+        knockbackForce = force;
     }
 }

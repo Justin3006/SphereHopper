@@ -69,11 +69,17 @@ public class PlayerController : MonoBehaviour
             motor.ActivateAbility();
         }
 
-        //TODO: replace with Mouse ScrollWheel?
+        // Handle Ability Switching with Keys.
         if (Input.GetButtonDown("Ability Switch Up"))
             motor.SwitchAbility(1);
         if (Input.GetButtonDown("Ability Switch Down"))
             motor.SwitchAbility(-1);
+        // Handle Ability Switching with Scroll Wheel.
+         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
+            if (scrollWheel > 0)
+                motor.SwitchAbility(1);
+            else if (scrollWheel < 0)
+                motor.SwitchAbility(-1);   
 
 
         //SECTION: Miscellaneous

@@ -2,10 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NotPendulum : MonoBehaviour
+public class RotatingCollider : MonoBehaviour
 {
-    //TODO: It currently rotates together with the object it's attached to, but it shouldn't
-    //TODO: Also, please find a better name!
     [SerializeField]
     int direction = 1;
     [SerializeField]
@@ -15,7 +13,11 @@ public class NotPendulum : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.Rotate(0, direction * rotationSpeed * Time.fixedDeltaTime, 0);
+        // Define the point and axis around which the object should rotate
+        Vector3 rotationPoint = transform.position;
+        Vector3 rotationAxis = Vector3.up;
+        // Rotate the object around the defined point and axis, based on the direction and rotation speed.
+        transform.RotateAround(rotationPoint, rotationAxis, direction * rotationSpeed * Time.fixedDeltaTime);
     }
 
     public void OnTriggerEnter(Collider other)

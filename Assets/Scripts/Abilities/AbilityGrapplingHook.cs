@@ -13,6 +13,8 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     const float range = 25;
     const float speed = 25;
 
+    GameObject targetCharacter;
+    Vector3 targetCharacterOriginalPosition;
 
     public string GetName()
     {
@@ -48,11 +50,14 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
         {
             targetLocation = hit.point;
             abilityUseTimeRemaining = (targetLocation - Camera.main.transform.position).magnitude / speed;
-            Debug.Log(abilityUseTimeRemaining);
             PlayerManager.GetMotor().LockMovement(abilityUseTimeRemaining);
             rb.useGravity = false;
+            if (hit.collider.gameObject.GetComponent<Vulnerable>() != null) 
+            {
+                targetCharacter = hit.collider.gameObject;
+                targetCharacterOriginalPosition = targetCharacter.transform.position;
+            }
         }
-        //PlayerManager.GetMotor().MoveToTarget(hit.point, speed);
 
         return true;
     }
@@ -67,7 +72,16 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (abilityUseTimeRemaining > 0) {
+        if (abilityUseTimeRemaining > 0) 
+        {
+            if (targetCharacter != null)
+            {
+                targetLocation += targetCharacter.transform.position - targetCharacterOriginalPosition;
+                targetCharacterOriginalPosition = targetCharacter.transform.position;
+                abilityUseTimeRemaining = (targetLocation - Camera.main.transform.position).magnitude / speed;
+                PlayerManager.GetMotor().LockMovement(abilityUseTimeRemaining);
+            }
+
             abilityUseTimeRemaining -= Time.fixedDeltaTime;
         
             Vector3 diff = targetLocation - Camera.main.transform.position;
@@ -78,6 +92,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             {
                 rb.useGravity = true;
                 abilityUseTimeRemaining = 0;
+                targetCharacter = null;
             }
          }
     }

@@ -10,6 +10,11 @@ public class AbilityPlaceholder : MonoBehaviour, IAbility
     float abilityUseTimeRemaining;
 
 
+    public string GetName()
+    {
+        return "-";
+    }
+
     public int GetUsesMax()
     {
         return usesMax;

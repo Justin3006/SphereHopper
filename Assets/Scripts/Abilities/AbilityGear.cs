@@ -11,6 +11,12 @@ public class AbilityGear : MonoBehaviour, IAbility
     const float buffTimeMax = 10;
     float buffTimeRemaining;
 
+
+    public string GetName() 
+    {
+        return "Gear";
+    }
+
     public int GetUsesMax()
     {
         return usesMax;

@@ -16,6 +16,11 @@ public class AbilityDischarge : MonoBehaviour, IAbility
     float projectileCD;
 
 
+    public string GetName()
+    {
+        return "Discharge";
+    }
+
     public int GetUsesMax()
     {
         return usesMax;

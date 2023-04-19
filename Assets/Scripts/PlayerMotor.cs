@@ -46,9 +46,6 @@ public class PlayerMotor : Vulnerable
 
     float movLockTime = 0;
 
-    Vector3 targetLocation;
-    float speedToTarget;
-
 
     [SerializeField]
     float attackCDMax = 0.4f;
@@ -99,6 +96,7 @@ public class PlayerMotor : Vulnerable
         equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
         equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
         equippedAbilities[2] = gameObject.AddComponent<AbilityGear>();
+        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesMax() + " uses left";
     }
 
     // Update is called once per frame
@@ -173,24 +171,6 @@ public class PlayerMotor : Vulnerable
             dashDuration -= Time.fixedDeltaTime;
         }
 
-        //Handle moving toward a target location.
-        if (speedToTarget != 0)
-        {
-            Vector3 diff = targetLocation - transform.position;
-            Vector3 newPos = transform.position + speedToTarget * Time.fixedDeltaTime * (diff).normalized;
-            if (diff.magnitude <= (newPos - transform.position).magnitude)
-            {
-                rb.MovePosition(targetLocation);
-                movLockTime = 0;
-                speedToTarget = 0;
-            }
-            else
-            {
-                rb.MovePosition(transform.position + newPos);
-                movLockTime = Time.fixedDeltaTime * 2;
-            }
-        }
-
 
         // Handle execution of combat actions.
         RaycastHit hit;
@@ -237,6 +217,7 @@ public class PlayerMotor : Vulnerable
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
         }
+
 
         // Handle Lock On
         // TODO: Fix keeping the correct distance to the locked on target when moving sideways as well as compatibility with dash (possibly the same thing)
@@ -288,6 +269,7 @@ public class PlayerMotor : Vulnerable
         dash = false;
     }
 
+    // Inputs
     public void Move(Vector3 movDir)
     {
         if (movLockTime <= 0)
@@ -327,6 +309,12 @@ public class PlayerMotor : Vulnerable
 
     public void Attack()
     {
+        foreach (IAbility a in equippedAbilities)
+        {
+            if (a.IsUsed())
+                return;
+        }
+
         if (swordCD <= 0)
         {
             swordCD = attackCDMax;
@@ -337,6 +325,12 @@ public class PlayerMotor : Vulnerable
 
     public void Parry()
     {
+        foreach (IAbility a in equippedAbilities)
+        {
+            if (a.IsUsed())
+                return;
+        }
+
         if (swordCD <= 0)
         {
             shielded = true;
@@ -348,6 +342,7 @@ public class PlayerMotor : Vulnerable
 
     public void LockOn() 
     {
+        //TODO: replace raycast with different function, that allows you to lock on to targets, that you aren't directly looking at
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, lockOnRange))
         {
@@ -372,8 +367,17 @@ public class PlayerMotor : Vulnerable
 
     public void ActivateAbility()
     {
-        equippedAbilities[selectedAbility].Use();
-        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left\n Ability " + selectedAbility;
+        foreach (IAbility a in equippedAbilities)
+        {
+            if (a.IsUsed())
+                return;
+        }
+
+        if (swordCD <= 0)
+        {
+            equippedAbilities[selectedAbility].Use();
+            abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left";
+        }
     }
 
     public void SwitchAbility(int dir)
@@ -381,18 +385,11 @@ public class PlayerMotor : Vulnerable
         selectedAbility = (selectedAbility + dir) % equippedAbilities.GetLength(0);
         if (selectedAbility < 0)
             selectedAbility = equippedAbilities.GetLength(0) - 1;
-        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left\n Ability " + selectedAbility;
+        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left";
     }
 
-    //TODO: delete this method and everyting connected to it (except movLockTime)
-    //obsolete
-    public void MoveToTarget(Vector3 target, float speed) 
-    {
-        targetLocation = target;
-        speedToTarget = speed;
-        movLockTime = Time.fixedDeltaTime * 2;
-    }
 
+    // Support Methods
     public void LockMovement(float time) 
     {
         movLockTime = time;

@@ -27,4 +27,10 @@ public interface IAbility
     /// </summary>
     /// <returns>true, if it is currently being used, otherwise false</returns>
     public bool IsUsed();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>the name of the ability</returns>
+    public string GetName();
 }

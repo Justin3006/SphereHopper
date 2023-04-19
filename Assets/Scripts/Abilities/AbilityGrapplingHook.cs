@@ -13,6 +13,12 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     const float range = 25;
     const float speed = 25;
 
+
+    public string GetName()
+    {
+        return "Grapplinghook";
+    }
+
     public int GetUsesMax()
     {
         return usesMax;

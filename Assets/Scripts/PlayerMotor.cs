@@ -135,10 +135,10 @@ public class PlayerMotor : Vulnerable
             rb.MovePosition(desPos);
 
             // rotate body
-            //TODO: Change Rotate to Lerp for smoother controlls
             if (lockOnTarget == null)
             {
-                transform.Rotate(0, Time.fixedDeltaTime * rotSpeed * rotDir, 0);
+                float targetRotationY = transform.rotation.eulerAngles.y + Time.fixedDeltaTime * rotSpeed * rotDir;
+                transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(0, targetRotationY, 0), Time.fixedDeltaTime * rotSpeed);
 
                 // rotate cam 
                 float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
@@ -149,8 +149,10 @@ public class PlayerMotor : Vulnerable
                 else if (newCamRot > 90 && newCamRot < 180)
                     cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
                 else
-                    //TODO: Change Rotate to Lerp for smoother controlls
-                    cam.transform.Rotate(camRotChange, 0, 0);
+                {
+                    float targetCamRotationX = cam.transform.rotation.eulerAngles.x + camRotChange;
+                    cam.transform.rotation = Quaternion.Lerp(cam.transform.rotation, Quaternion.Euler(targetCamRotationX, cam.transform.rotation.eulerAngles.y, cam.transform.rotation.eulerAngles.z), Time.fixedDeltaTime * camRotSpeed);
+                }
             }
 
             // jump
@@ -205,14 +207,14 @@ public class PlayerMotor : Vulnerable
         }
         distanceIndicator.GetComponent<RectTransform>().localScale = new Vector3(distancePercent, distancePercent, 1);
 
+        //TODO: Fix keeping the correct distance to the locked-on target when moving sideways as well as compatibility with dash (possibly the same thing)
         if (lockOnTarget != null)
         {
-            float distanceToTarget = Vector3.Distance(cam.transform.position, lockOnTarget.transform.position);
-            if (distanceToTarget > lockOnRange)
-            {
-                lockOnTarget = null;
-            }
-        }
+            float prev_y = cam.transform.eulerAngles.y;
+            cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
+            transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
+            movDir = Quaternion.Euler(0, cam.transform.eulerAngles.y - prev_y, 0) * movDir;
+        }   
         
         // attack
         if (attackDuration > 0) 

@@ -58,7 +58,7 @@ public class PlayerController : MonoBehaviour
 
         // Handle Lock On.
         //TODO: Replace with generic Button Input
-        if (Input.GetKeyDown(KeyCode.Tab)) 
+        if (Input.GetButtonDown("Lock On")) 
         {
             motor.LockOn();
         }

@@ -32,6 +32,11 @@ public class PlayerMotor : Vulnerable
     [SerializeField]
     float jumpPower = 7.5f;
     bool jump;
+    [SerializeField]
+    float bonusJumpPower = 5;
+    [SerializeField]
+    int bonusJumpsMax = 2;
+    int bonusJumpsRemaining;
 
     [SerializeField]
     float dashSpeed = 30;
@@ -100,6 +105,7 @@ public class PlayerMotor : Vulnerable
         equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
         equippedAbilities[2] = gameObject.AddComponent<AbilityGear>();
         abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesMax() + " uses left";
+        bonusJumpsRemaining = bonusJumpsMax;
     }
 
     //SECTION: Regular Updates
@@ -143,16 +149,27 @@ public class PlayerMotor : Vulnerable
                     //TODO: Change Rotate to Lerp for smoother controlls
                     cam.transform.Rotate(camRotChange, 0, 0);
             }
-            
+
             // jump
             if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
+            {
                 grounded = true;
-            else if(untilUngrounded <= 0)
+                bonusJumpsRemaining = bonusJumpsMax;
+            }
+            else if (untilUngrounded <= 0)
                 untilUngrounded = untilUngroundedMax;
 
             if (jump)
             {
-                rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+                if (grounded)
+                {
+                    rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+                }
+                else if (bonusJumpsRemaining > 0)
+                {
+                    bonusJumpsRemaining--;
+                    rb.velocity = new Vector3(rb.velocity.x, bonusJumpPower, rb.velocity.z);
+                }
             }
 
             // dash
@@ -291,8 +308,7 @@ public class PlayerMotor : Vulnerable
 
     public void Jump() 
     {
-        if (grounded)
-            jump = true;
+        jump = true;
     }
 
     public void Dash() 

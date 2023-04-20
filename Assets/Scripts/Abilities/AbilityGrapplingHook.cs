@@ -10,6 +10,9 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     const int usesMax = 10;
     int usesRemaining;
     float abilityUseTimeRemaining;
+    // recovery time prevents you from glitching through walls too easily
+    float recoveryTimeMax = 0.1f;
+    float recoveryTimeRemaining;
 
     Vector3 targetLocation;
     Rigidbody rb;
@@ -39,7 +42,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
 
     public bool IsUsed()
     {
-        if (abilityUseTimeRemaining > 0)
+        if (abilityUseTimeRemaining > 0 || recoveryTimeRemaining > 0)
             return true;
         else
             return false;
@@ -52,7 +55,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
         usesRemaining--;
 
         RaycastHit hit;
-        if (Physics.Raycast(Camera.main.transform.position + 2 * Camera.main.transform.forward, Camera.main.transform.forward, out hit, range))
+        if (Physics.Raycast(Camera.main.transform.position + 0.4f * Camera.main.transform.forward, Camera.main.transform.forward, out hit, range))
         {
             targetLocation = hit.point;
             abilityUseTimeRemaining = (targetLocation - Camera.main.transform.position).magnitude / speed;
@@ -77,6 +80,11 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
 
     void FixedUpdate()
     {
+        if (recoveryTimeRemaining > 0) 
+        {
+            recoveryTimeRemaining -= Time.fixedDeltaTime;
+        }
+
         if (abilityUseTimeRemaining > 0) 
         {
             if (targetCharacter != null)
@@ -103,7 +111,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
                     targetCharacter.Knockback(transform.position, impact, stun);
                     targetCharacter = null;
                 }
-                
+                recoveryTimeRemaining = recoveryTimeMax;
             }
          }
     }

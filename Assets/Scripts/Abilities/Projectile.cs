@@ -5,7 +5,7 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     float dmg = 15;
-    float speed = 10;
+    float speed = 25;
 
     // Update is called once per frame
     void FixedUpdate()

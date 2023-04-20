@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Draws you towards a target position and knocks back enemies on the way.
+/// </summary>
 public class AbilityGrapplingHook : MonoBehaviour, IAbility
 {
     const int usesMax = 10;
@@ -13,10 +16,11 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     const float range = 25;
     const float speed = 25;
 
-    GameObject targetCharacter;
+    Vulnerable targetCharacter;
     Vector3 targetCharacterOriginalPosition;
 
-    [SerializeField] private float knockbackForce = 20f;    
+    const float impact = 10f;
+    const float stun = 0.025f;
 
     public string GetName()
     {
@@ -54,32 +58,23 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             abilityUseTimeRemaining = (targetLocation - Camera.main.transform.position).magnitude / speed;
             PlayerManager.GetMotor().LockMovement(abilityUseTimeRemaining);
             rb.useGravity = false;
+            PlayerManager.GetCollider().isTrigger = true;
             if (hit.collider.gameObject.GetComponent<Vulnerable>() != null) 
             {
-                targetCharacter = hit.collider.gameObject;
+                targetCharacter = hit.collider.gameObject.GetComponent<Vulnerable>();
                 targetCharacterOriginalPosition = targetCharacter.transform.position;
-
-                // Apply knockback force to the target character
-                Rigidbody targetRb = targetCharacter.GetComponent<Rigidbody>();
-                if (targetRb != null && !targetCharacter.CompareTag("Player"))
-                {
-                    Vector3 knockbackDirection = (targetCharacter.transform.position - Camera.main.transform.position).normalized;
-                    targetRb.AddForce(knockbackDirection * knockbackForce, ForceMode.Impulse);
-                }
             }
         }
 
         return true;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         usesRemaining = usesMax;
         rb = PlayerManager.GetRigidbody();
     }
 
-    // Update is called once per frame
     void FixedUpdate()
     {
         if (abilityUseTimeRemaining > 0) 
@@ -101,14 +96,23 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             if (diff.magnitude <= 1.5f)
             {
                 rb.useGravity = true;
+                PlayerManager.GetCollider().isTrigger = false;
                 abilityUseTimeRemaining = 0;
-                targetCharacter = null;
+                if (targetCharacter != null) 
+                {
+                    targetCharacter.Knockback(transform.position, impact, stun);
+                    targetCharacter = null;
+                }
+                
             }
          }
     }
 
-    public void SetKnockbackForce(float force)
+
+    private void OnTriggerEnter(Collider other)
     {
-        knockbackForce = force;
+        Vulnerable v = other.GetComponent<Vulnerable>();
+        if(v != null)
+            v.Knockback(PlayerManager.GetTransform().position, impact, stun);
     }
 }

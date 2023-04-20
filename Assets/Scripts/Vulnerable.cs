@@ -22,6 +22,11 @@ public class Vulnerable : MonoBehaviour
     bool executeImmunity;
     float executePercentage = 0;
 
+    [SerializeField]
+    bool knockbackImmunity;
+    protected Vector3 directedImpact;
+    protected float stun;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,11 +69,23 @@ public class Vulnerable : MonoBehaviour
             damageIndicator.SetActive(true);
         }
 
+        Knockback(origin, impact, stun);
+
         hp--;
         if (hp <= 0)
             Kill();
         
         return true;
+    }
+
+    public virtual void Knockback(Vector3 origin, float impact, float stun) 
+    {
+        if (knockbackImmunity)
+            return;
+
+        directedImpact = impact * (transform.position - origin).normalized;
+        this.stun = stun;
+        
     }
 
     public void Execute(float addPercentage) 

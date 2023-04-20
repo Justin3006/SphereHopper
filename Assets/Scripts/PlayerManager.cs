@@ -25,4 +25,9 @@ public class PlayerManager : MonoBehaviour
     {
         return player.GetComponent<Rigidbody>();
     }
+
+    public static Collider GetCollider() 
+    {
+        return player.GetComponent<Collider>();
+    }
 }

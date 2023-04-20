@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Boosts movementspeed and knockback for a few seconds.
+/// </summary>
 public class AbilityGear : MonoBehaviour, IAbility
 {
     const int usesMax = 2;
@@ -61,8 +64,8 @@ public class AbilityGear : MonoBehaviour, IAbility
             if (abilityUseTimeRemaining <= 0) 
             {
                 buffTimeRemaining = buffTimeMax;
-                PlayerManager.GetMotor().SetAttackStunModifier(5);
-                PlayerManager.GetMotor().SetAttackImpactModifier(5);
+                PlayerManager.GetMotor().SetAttackStunModifier(1.5f);
+                PlayerManager.GetMotor().SetAttackImpactModifier(1.5f);
                 PlayerManager.GetMotor().SetGeneralSpeedModifier(2);
             }
         }

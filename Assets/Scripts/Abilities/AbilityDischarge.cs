@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Shoots seven bullets, if all connect to a target, it dies.
+/// </summary>
 public class AbilityDischarge : MonoBehaviour, IAbility
 {
     int usesMax = 3;

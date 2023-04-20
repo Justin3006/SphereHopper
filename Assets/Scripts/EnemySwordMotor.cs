@@ -36,8 +36,6 @@ public class EnemySwordMotor : Vulnerable
 
     float movLockTime;
 
-    Vector3 displacement;
-
     Vector3 lastMovDir;
 
     
@@ -82,6 +80,16 @@ public class EnemySwordMotor : Vulnerable
     //SECTION: Regular Updates
     void FixedUpdate()
     {
+        //SUBSECTION: Displacement
+        if (stun > 0) 
+        {
+            movLockTime = stun;
+            stun = 0;
+            //TODO: Change directedImpact.magnitude/3 * transform.up for something that scales better with different impact and stun values
+            rb.velocity = directedImpact + directedImpact.magnitude/3 * transform.up;
+        }
+
+
         //SUBSECTION: Action calculation and execution
         if (movLockTime <= 0)
         {
@@ -232,9 +240,6 @@ public class EnemySwordMotor : Vulnerable
 
         }
 
-        //SUBSECTION: Displacement
-        if(displacement != Vector3.zero)
-            rb.MovePosition(transform.position + Time.fixedDeltaTime * displacement);
 
         //SUBSECTION: Cooldowns
         if (movementChangeCD > 0)
@@ -252,29 +257,6 @@ public class EnemySwordMotor : Vulnerable
         if (movLockTime > 0)
         {
             movLockTime -= Time.fixedDeltaTime;
-            if (movLockTime <= 0)
-                displacement = Vector3.zero;
         }
-    }
-
-
-    //SECTION: Support Methods
-    public override bool Hit(Vector3 origin, float impact, float stun)
-    {
-        if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
-        {
-            shieldedAttacks++;
-            return false;
-        }
-
-        hp--;
-        if (hp <= 0)
-            Destroy(gameObject);
-
-        movLockTime = stun;
-        //TODO: should probably be replaced by rb.velocity stuff or rb.AddForce(x,y,z)
-        displacement = impact * (transform.position - origin).normalized;
-            
-        return true;
     }
 }

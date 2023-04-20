@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Just a placeholder for testing purposes.
+/// </summary>
 public class AbilityPlaceholder : MonoBehaviour, IAbility 
 {
-    int usesMax = 3;
+    int usesMax = 0;
     int usesRemaining;
-    float abilityUseTimeMax = 1;
+    float abilityUseTimeMax = 0;
     float abilityUseTimeRemaining;
 
 

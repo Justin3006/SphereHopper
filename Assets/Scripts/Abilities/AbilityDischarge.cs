@@ -59,6 +59,7 @@ public class AbilityDischarge : MonoBehaviour, IAbility
     void Start()
     {
         usesRemaining = usesMax;
+        //TODO: Change object path
         projectile = (GameObject)Resources.Load("Projectile", typeof(GameObject));
     }
 

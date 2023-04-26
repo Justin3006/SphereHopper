@@ -33,7 +33,7 @@ public class PlayerMotor : Vulnerable
     float jumpPower = 7.5f;
     bool jump;
     [SerializeField]
-    float bonusJumpPower = 5;
+    float bonusJumpPower = 6;
     [SerializeField]
     int bonusJumpsMax = 2;
     int bonusJumpsRemaining;
@@ -350,6 +350,8 @@ public class PlayerMotor : Vulnerable
             return;
         }
         
+        //TODO: Lock on to target, even if it was slightly missed
+
         RaycastHit hit;
 
         // Raycast from the camera's position, only in the horizontal direction.
@@ -365,6 +367,8 @@ public class PlayerMotor : Vulnerable
             }
             
         }
+
+        //TODO: Maybe just straight up rework the entire mechanic?
                 
     }
 

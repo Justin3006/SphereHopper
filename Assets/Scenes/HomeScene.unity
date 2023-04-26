@@ -7837,6 +7837,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1336566350}
     - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: bonusJumpPower
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923324518417232, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: rangeIndicator
       value: 
       objectReference: {fileID: 1880365781}

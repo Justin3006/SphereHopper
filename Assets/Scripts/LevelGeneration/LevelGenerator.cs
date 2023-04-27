@@ -5,28 +5,22 @@ using UnityEngine;
 //TODO: LevelManager statt LevelGenerator
 public class LevelGenerator : MonoBehaviour
 {
-    private static List<ILevel> levels;
+    private static List<ILevel> levels = new List<ILevel>();
     private static int minNumberOfLevels = 10;
     private static int maxNumberOfLevels = 20;
     private static int currentLevel = -1;
 
-    // Start is called before the first frame update
+
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        LoadLevel(currentLevel);
     }
 
     public static void GenerateNewLevels() 
     {
         levels.Clear();
         int numberOfLevels = Random.Range(minNumberOfLevels, maxNumberOfLevels);
-        
+
         for (int i = 0; i < numberOfLevels; i++) 
         {
             levels.Add(new PlaceholderLevel(Random.Range(0, 10)));
@@ -35,10 +29,16 @@ public class LevelGenerator : MonoBehaviour
 
     public static void LoadLevel(int i) 
     {
-        if (currentLevel != -1)
-            //TODO: Does unloading make any sense? You only enter it from the level selection screen anyway, the last opened Level wouldn't be loaded in anyway 
-            levels[currentLevel].UnloadLevel();
-        levels[i].LoadLevel();
+        GameObject newO = null;
+        foreach (GameObject o in levels[i].LoadLevel()) 
+        {
+            newO = Instantiate(o);
+        }
+        currentLevel = i;
+    }
+
+    public static void SelectLevel(int i) 
+    {
         currentLevel = i;
     }
 }

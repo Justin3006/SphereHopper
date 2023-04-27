@@ -3,30 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlaceholderLevel : MonoBehaviour, ILevel
+public class PlaceholderLevel : ILevel
 {
-    GameObject levelLayout;
-    List<GameObject> currentState;
+    List<GameObject> currentState = new List<GameObject>();
 
     public PlaceholderLevel(int number) 
     {
-        levelLayout = (GameObject)Resources.Load("LevelGenerator\\PlaceholderLevelLayout", typeof(GameObject));
-        GetComponentInChildren<TextMeshProUGUI>().text = number.ToString();
+        GameObject levelLayout = (GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject));
+        currentState.Add(levelLayout);
+        //levelLayout.GetComponentInChildren<TextMeshProUGUI>().text = number.ToString();
     }
 
-    public void LoadLevel() 
+    public List<GameObject> LoadLevel() 
     {
-        PlayerManager.GetTransform().position = Vector3.zero;
-        PlayerManager.GetTransform().eulerAngles = Vector3.zero;
-        currentState.Add(Instantiate(levelLayout));
-    }
-
-    public void UnloadLevel() 
-    {
-        foreach (GameObject o in currentState) 
-        {
-            Destroy(o);
-        }
-        currentState.Clear();
+        return currentState;
     }
 }

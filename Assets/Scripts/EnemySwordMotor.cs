@@ -104,7 +104,12 @@ public class EnemySwordMotor : Vulnerable
             // How to move when player within radius
             if (toPlayer.magnitude <= VISION_RANGE)
             {
+                Quaternion priorRot = transform.rotation;
                 transform.LookAt(playerPosition);
+                if (Quaternion.Angle(priorRot, transform.rotation) > rotSpeed * Time.fixedDeltaTime)
+                {
+                    transform.rotation = Quaternion.RotateTowards(priorRot, transform.rotation, rotSpeed * Time.fixedDeltaTime);
+                }
 
                 // Calculate fitting movement
                 if (toPlayer.magnitude <= ACTIVE_RANGE)

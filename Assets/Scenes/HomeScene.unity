@@ -3078,7 +3078,7 @@ MonoBehaviour:
   knockbackImmunity: 0
   movSpeed: 5
   walkSpeed: 3
-  rotSpeed: 360
+  rotSpeed: 720
   movementChangeCDMax: 0.05
   movementChangeProbabilityZ: 0.15
   movementZDurationMax: 1
@@ -5115,7 +5115,7 @@ MonoBehaviour:
   knockbackImmunity: 0
   movSpeed: 5
   walkSpeed: 3
-  rotSpeed: 360
+  rotSpeed: 720
   movementChangeCDMax: 0.05
   movementChangeProbabilityZ: 0.15
   movementZDurationMax: 1
@@ -5418,7 +5418,7 @@ MonoBehaviour:
   knockbackImmunity: 0
   movSpeed: 5
   walkSpeed: 3
-  rotSpeed: 360
+  rotSpeed: 720
   movementChangeCDMax: 0.05
   movementChangeProbabilityZ: 0.15
   movementZDurationMax: 1

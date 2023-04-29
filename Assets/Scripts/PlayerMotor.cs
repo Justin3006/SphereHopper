@@ -54,8 +54,6 @@ public class PlayerMotor : Vulnerable
 
     [SerializeField]
     float lockOnRange = 15;
-    [SerializeField]
-    private float unlockThreshold = 30f; // Horizontal angle threshold to unlock the target
 
     //TODO: change "Vulnerable" to something more suitable
     Vulnerable lockOnTarget;
@@ -184,6 +182,7 @@ public class PlayerMotor : Vulnerable
                 movLockTime = dashDurationMax;
                 dashCD = dashCDMax;
                 dashIndicator.SetActive(false);
+                cam.fieldOfView = 61;
             }
         }
 
@@ -192,6 +191,10 @@ public class PlayerMotor : Vulnerable
         {
             rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * generalSpeedModifier * movDir);
             dashDuration -= Time.fixedDeltaTime;
+            if (dashDuration <= 0)
+            {
+                cam.fieldOfView = 60;
+            }
         }
 
 
@@ -299,8 +302,6 @@ public class PlayerMotor : Vulnerable
         //SUBSECTION: Reset Notifications
         jump = false;
         dash = false;
-
-
     }
 
 
@@ -341,7 +342,7 @@ public class PlayerMotor : Vulnerable
             movSpeed *= 1.9f;
         walking = !walking;
     }
-    //TODO: Allow vertical movement while locked on and make it span of if mouse is moved
+
     public void LockOn()
     {
         if (lockOnTarget != null)
@@ -368,7 +369,7 @@ public class PlayerMotor : Vulnerable
             
         }
 
-        //TODO: Maybe just straight up rework the entire mechanic?
+        //TODO: Maybe just straight up rework the entire mechanic? Attach empty Objects to each enemy, where you lock the camera onto?
                 
     }
 

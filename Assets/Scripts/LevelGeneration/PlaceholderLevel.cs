@@ -11,7 +11,7 @@ public class PlaceholderLevel : ILevel
     {
         GameObject levelLayout = (GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject));
         currentState.Add(levelLayout);
-        //levelLayout.GetComponentInChildren<TextMeshProUGUI>().text = number.ToString();
+        levelLayout.GetComponentInChildren<TextMeshProUGUI>().text = number.ToString();
     }
 
     public List<GameObject> LoadLevel() 

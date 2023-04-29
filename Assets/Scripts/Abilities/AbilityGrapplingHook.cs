@@ -83,6 +83,15 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
         if (recoveryTimeRemaining > 0) 
         {
             recoveryTimeRemaining -= Time.fixedDeltaTime;
+            if (recoveryTimeRemaining <= 0) 
+            {
+                Collider[] colls = Physics.OverlapCapsule(PlayerManager.GetTransform().position, PlayerManager.GetTransform().position + 2 * PlayerManager.GetTransform().up, 0.5f);
+                foreach (Collider c in colls)
+                {
+                    //TODO: This is an incredibly ugly solution, there has to be a better way. If this part is taken out, you can glitch through the ground when you use the hook at the wrong angle.
+                    PlayerManager.GetTransform().Translate(0, c.ClosestPointOnBounds(PlayerManager.GetTransform().position + 999 * Vector3.up).y - PlayerManager.GetTransform().position.y, 0);
+                }
+            }
         }
 
         if (abilityUseTimeRemaining > 0) 
@@ -105,6 +114,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             {
                 rb.useGravity = true;
                 PlayerManager.GetCollider().isTrigger = false;
+
                 abilityUseTimeRemaining = 0;
                 if (targetCharacter != null) 
                 {

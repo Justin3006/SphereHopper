@@ -28,6 +28,6 @@ public class PlayerManager : MonoBehaviour
 
     public static Collider GetCollider() 
     {
-        return player.GetComponent<Collider>();
+        return player.GetComponent<CapsuleCollider>();
     }
 }

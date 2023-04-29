@@ -112,6 +112,13 @@ public class PlayerMotor : Vulnerable
     //SECTION: Regular Updates
     void FixedUpdate()
     {
+        //SUBSECTION: Physics
+        if (movLockTime <= 0)
+        {
+            rb.velocity = rb.velocity.y * Vector3.up;
+            rb.useGravity = true;
+        }
+
         //SUBSECTION: Direct Inputs
         if (movLockTime <= 0)
         {
@@ -125,7 +132,6 @@ public class PlayerMotor : Vulnerable
                 {
                     if (c.gameObject.name != "player")
                     {
-                        
                         desPos = c.ClosestPoint(desPos);
                     }
                 }
@@ -434,7 +440,7 @@ public class PlayerMotor : Vulnerable
     public void Interact()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE))
+        if (Physics.Raycast(cam.transform.position + 0.5f * cam.transform.forward, cam.transform.forward, out hit, ATTACK_RANGE))
         {
             IInteractable t = hit.collider.gameObject.GetComponent<IInteractable>();
             if (t != null)

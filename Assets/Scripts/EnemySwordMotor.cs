@@ -80,6 +80,12 @@ public class EnemySwordMotor : Vulnerable
     //SECTION: Regular Updates
     void FixedUpdate()
     {
+        //SUBSECTION: Physics
+        if (movLockTime <= 0)
+        {
+            rb.velocity = rb.velocity.y * Vector3.up;
+        }
+
         //SUBSECTION: Displacement
         if (stun > 0) 
         {

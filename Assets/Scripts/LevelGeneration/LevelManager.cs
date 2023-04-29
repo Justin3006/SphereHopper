@@ -37,7 +37,6 @@ public class LevelManager : MonoBehaviour
         {
             newO = Instantiate(o);
         }
-        currentLevel = i;
     }
 
     public static void SelectLevel(int i) 

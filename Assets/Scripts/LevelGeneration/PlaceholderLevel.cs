@@ -6,17 +6,19 @@ using UnityEngine;
 public class PlaceholderLevel : ILevel
 {
     List<GameObject> currentState = new List<GameObject>();
+    int number;
 
     public PlaceholderLevel(int number) 
     {
         GameObject levelLayout = (GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject));
         currentState.Add(levelLayout);
-        //TODO: Find out why the numbers are the same for one GenerateNewLevels()
-        levelLayout.GetComponentInChildren<TextMeshPro>().text = number.ToString();
+        this.number = number;
+        
     }
 
-    public List<GameObject> LoadLevel() 
+    public List<GameObject> LoadLevel()
     {
+        Debug.Log(number);
         return currentState;
     }
 }

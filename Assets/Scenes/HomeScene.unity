@@ -7892,6 +7892,14 @@ PrefabInstance:
       propertyPath: indicatorDurationMax
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7521923324518417233, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: m_Drag
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923324518417233, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
     - target: {fileID: 7521923324518417235, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
       propertyPath: m_RootOrder
       value: 3

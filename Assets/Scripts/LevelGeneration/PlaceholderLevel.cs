@@ -11,7 +11,8 @@ public class PlaceholderLevel : ILevel
     {
         GameObject levelLayout = (GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject));
         currentState.Add(levelLayout);
-        levelLayout.GetComponentInChildren<TextMeshProUGUI>().text = number.ToString();
+        //TODO: Find out why the numbers are the same for one GenerateNewLevels()
+        levelLayout.GetComponentInChildren<TextMeshPro>().text = number.ToString();
     }
 
     public List<GameObject> LoadLevel() 

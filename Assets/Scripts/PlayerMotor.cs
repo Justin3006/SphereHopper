@@ -436,7 +436,7 @@ public class PlayerMotor : Vulnerable
         RaycastHit hit;
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, ATTACK_RANGE))
         {
-            Transporter t = hit.collider.gameObject.GetComponent<Transporter>();
+            IInteractable t = hit.collider.gameObject.GetComponent<IInteractable>();
             if (t != null)
                 t.Interact();
         }

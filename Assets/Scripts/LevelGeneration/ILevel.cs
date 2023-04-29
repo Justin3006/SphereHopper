@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface ILevel
 {
-    public List<GameObject> LoadLevel();
+    public void LoadLevel();
 }

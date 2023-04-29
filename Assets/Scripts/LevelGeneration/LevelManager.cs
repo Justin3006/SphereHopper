@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     private static List<ILevel> levels = new List<ILevel>();
-    private static Dictionary<ILevel, Vector3> levelPositions = new Dictionary<ILevel, Vector3>();
+    private static Dictionary<int, Vector3> levelPositions = new Dictionary<int, Vector3>();
     private static int minNumberOfLevels = 10;
     private static int maxNumberOfLevels = 20;
     private static int currentLevel = -1;
@@ -24,19 +24,17 @@ public class LevelManager : MonoBehaviour
 
         for (int i = 0; i < numberOfLevels; i++) 
         {
-            levels.Add(new PlaceholderLevel(Random.Range(0, 10)));
+            //levels.Add(new PlaceholderLevel(Random.Range(0, 10)));
+            levels.Add(new LabyrinthLevel());
+            
             //TODO: Find better way to place different levels
-            levelPositions.Add(levels[i], new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), Random.Range(-20, 20)));
+            levelPositions.Add(i, new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), Random.Range(-20, 20)));
         }
     }
 
     public static void LoadLevel(int i) 
     {
-        GameObject newO = null;
-        foreach (GameObject o in levels[i].LoadLevel()) 
-        {
-            newO = Instantiate(o);
-        }
+        levels[i].LoadLevel();    
     }
 
     public static void SelectLevel(int i) 
@@ -51,6 +49,6 @@ public class LevelManager : MonoBehaviour
 
     public static Vector3 GetLevelPosition(int level) 
     {
-        return levelPositions[levels[level]];
+        return levelPositions[level];
     }
 }

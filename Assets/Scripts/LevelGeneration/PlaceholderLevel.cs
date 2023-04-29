@@ -3,22 +3,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlaceholderLevel : ILevel
+public class PlaceholderLevel : MonoBehaviour, ILevel
 {
-    List<GameObject> currentState = new List<GameObject>();
     int number;
 
     public PlaceholderLevel(int number) 
     {
         GameObject levelLayout = (GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject));
-        currentState.Add(levelLayout);
         this.number = number;
-        
     }
 
-    public List<GameObject> LoadLevel()
+    public void LoadLevel()
     {
-        Debug.Log(number);
-        return currentState;
+        Debug.Log("Placeholder Level Number: " + number);
+        Instantiate((GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject)));
     }
 }

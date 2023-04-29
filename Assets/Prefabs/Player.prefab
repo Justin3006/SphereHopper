@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 7521923324518417233}
   - component: {fileID: 7521923324518417232}
   - component: {fileID: 7521923324518417239}
+  - component: {fileID: 416668932}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -249,12 +250,12 @@ MonoBehaviour:
   maxHp: 3
   damageIndicator: {fileID: 0}
   indicatorDurationMax: 0.2
-  executeImmunity: 0
+  executeImmunity: 1
   knockbackImmunity: 0
   movSpeed: 7
   rotSpeed: 360
   camRotSpeed: 360
-  untilUngroundedMax: 0.25
+  untilUngroundedMax: 0.1
   jumpPower: 7.5
   bonusJumpPower: 6
   bonusJumpsMax: 2
@@ -281,6 +282,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f3220f83217c02c4eac4add7b9e9f528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &416668932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7521923324518417238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 092d40d3a6f2847488b9c845b9a0f3a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7521923325937894979

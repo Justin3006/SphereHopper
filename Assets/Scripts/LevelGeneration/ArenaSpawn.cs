@@ -8,7 +8,8 @@ public class ArenaSpawn : MonoBehaviour
     bool cleared;
     float size = 15;
     List<GameObject[]> enemies;
-    List<GameObject> currentEnemies;
+    List<GameObject> currentEnemies = new List<GameObject>();
+    GameObject reward;
     int spawnerDistance = 21;
 
     // Update is called once per frame
@@ -26,12 +27,14 @@ public class ArenaSpawn : MonoBehaviour
                     noEnemies = false;
             }
 
-            if (!noEnemies) {
+            if (noEnemies) {
                 if (enemies.Count == 0)
                 {
                     cleared = true;
+                    Instantiate(reward, Vector3.zero, Quaternion.Euler(0, 0, 0));
                     return;
                 }
+
                 currentEnemies.Clear();
                 GameObject[] enemiesToSpawn = enemies[0];
                 bool[] spawnUsed = new bool[4];
@@ -47,6 +50,7 @@ public class ArenaSpawn : MonoBehaviour
                             continue;
 
                         spawned = true;
+                        spawnUsed[rn] = true;
 
                         switch (rn)
                         {
@@ -56,8 +60,15 @@ public class ArenaSpawn : MonoBehaviour
                             case 3: currentEnemies.Add(Instantiate(enemy, new Vector3(0, 0, spawnerDistance), Quaternion.Euler(0, 0, 0))); break;
                         }
                     }
-                } 
+                }
+                enemies.RemoveAt(0);
             }
         }
     }
+
+    public void ArenaSettings(List<GameObject[]> enemies, GameObject reward) 
+    {
+        this.enemies = enemies;
+        this.reward = reward;
+    } 
 }

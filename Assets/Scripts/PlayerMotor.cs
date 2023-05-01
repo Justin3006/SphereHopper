@@ -102,7 +102,7 @@ public class PlayerMotor : Vulnerable
         rb = GetComponent<Rigidbody>();
         cam = GetComponentInChildren<Camera>();
         hp = maxHp;
-        equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
+        equippedAbilities[0] = gameObject.AddComponent<AbilityAnchor>();
         equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
         equippedAbilities[2] = gameObject.AddComponent<AbilityGear>();
         abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesMax() + " uses left";

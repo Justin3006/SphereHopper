@@ -222,12 +222,13 @@ MonoBehaviour:
   movementChangeProbabilityX: 0.05
   movementXDurationMax: 10
   movementXContinue: 0
-  attackCDMax: 0.8
-  attackDurationMax: 0.25
+  attackCDMax: 1
+  attackDurationMax: 0.4
   parryCDMax: 0.75
   parryDurationMax: 0.25
-  attackProbability: 0.33
-  parryProbability: 0.25
+  attackProbability: 0.75
+  parryProbability: 0
+  attack_attempt_range: 4
   weaponGFX: {fileID: 653344137491713218}
 --- !u!1 &653344138411199311
 GameObject:

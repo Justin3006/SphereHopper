@@ -248,13 +248,17 @@ public class PlayerMotor : Vulnerable
         if (parryDuration > 0)
         {
             parryDuration -= Time.deltaTime;
-            if (parryDuration <= 0)
+
+            if (shieldedAttacks >= 1) 
             {
                 shielded = false;
-                if (shieldedAttacks >= 1) 
-                {
-                    swordCD /= 2;
-                }
+                parryDuration = 0;
+                swordCD = 0;
+                swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, -200, 0);
+            }
+            else if (parryDuration <= 0)
+            {
+                shielded = false;
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
         }

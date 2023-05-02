@@ -61,6 +61,13 @@ public class ArenaSpawn : MonoBehaviour
                         }
                     }
                 }
+
+                foreach (GameObject enemy in currentEnemies) 
+                {
+                    //TODO: generalize (probably create a base class for all enemy AIs)
+                    enemy.GetComponent<EnemySwordMotor>().SetChasing(true);    
+                }
+
                 enemies.RemoveAt(0);
             }
         }

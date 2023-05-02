@@ -4,7 +4,8 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class EnemySwordMotor : Vulnerable
-{
+{  
+    //TODO: clean up this entire class and create a base class for all enemy AI 
     Rigidbody rb;
 
     //SECTION: Movement Attributes
@@ -34,6 +35,8 @@ public class EnemySwordMotor : Vulnerable
     [SerializeField]
     bool movementXContinue = false;
 
+    bool chasing;
+
     float movLockTime;
 
     Vector3 lastMovDir;
@@ -56,6 +59,9 @@ public class EnemySwordMotor : Vulnerable
     float attackProbability = 0.4f;
     [SerializeField]
     float parryProbability = 0.25f;
+
+    [SerializeField]
+    float attack_attempt_range = 4;
 
     const float ATTACK_RANGE = 3;
 
@@ -108,7 +114,7 @@ public class EnemySwordMotor : Vulnerable
             float speed = movSpeed;
 
             // How to move when player within radius
-            if (toPlayer.magnitude <= VISION_RANGE)
+            if (toPlayer.magnitude <= VISION_RANGE || chasing)
             {
                 Quaternion priorRot = transform.rotation;
                 transform.LookAt(playerPosition);
@@ -195,12 +201,19 @@ public class EnemySwordMotor : Vulnerable
 
 
             // Calculate fitting combat action
-            if (dist <= ATTACK_RANGE * 1.1f)
+            //TODO: move forward when attacking
+            if (dist <= ATTACK_RANGE && swordCD <= 0) 
+            {
+                swordCD = attackCDMax;
+                attackDuration = attackDurationMax;
+                weaponGFX.transform.localEulerAngles = new Vector3(-30, 0, 0);
+            }
+            else if (dist <= attack_attempt_range)
             {
                 if (swordCD <= 0)
                 {
                     float rand = Random.Range(0f, 1f);
-                    if (rand < attackProbability)
+                    if (rand < attackProbability * Time.fixedDeltaTime)
                     {
                         swordCD = attackCDMax;
                         attackDuration = attackDurationMax;
@@ -209,7 +222,7 @@ public class EnemySwordMotor : Vulnerable
                     else
                     {
                         rand = Random.Range(0f, 1f);
-                        if (rand < parryProbability)
+                        if (rand < parryProbability * Time.fixedDeltaTime)
                         {
                             shielded = true;
                             swordCD = parryCDMax;
@@ -269,5 +282,11 @@ public class EnemySwordMotor : Vulnerable
         {
             movLockTime -= Time.fixedDeltaTime;
         }
+    }
+
+    //SECTION: Support Methods
+    public void SetChasing(bool chasing) 
+    {
+        this.chasing = chasing;
     }
 }

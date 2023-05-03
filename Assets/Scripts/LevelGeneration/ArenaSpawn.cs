@@ -15,7 +15,7 @@ public class ArenaSpawn : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if ((PlayerManager.GetTransform().position - transform.position).magnitude < size)
+        if ((PlayerManager.GetPosition() - transform.position).magnitude < size)
             active = true;
 
         if (active && !cleared) 

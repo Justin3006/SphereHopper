@@ -59,9 +59,9 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
         {
             targetLocation = hit.point;
             abilityUseTimeRemaining = (targetLocation - Camera.main.transform.position).magnitude / speed;
-            PlayerManager.GetMotor().LockMovement(abilityUseTimeRemaining);
+            gameObject.GetComponent<PlayerMotor>().LockMovement(abilityUseTimeRemaining);
             rb.useGravity = false;
-            PlayerManager.GetCollider().isTrigger = true;
+            gameObject.GetComponent<Collider>().isTrigger = true;
             if (hit.collider.gameObject.GetComponent<Vulnerable>() != null) 
             {
                 targetCharacter = hit.collider.gameObject.GetComponent<Vulnerable>();
@@ -75,7 +75,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     void Start()
     {
         usesRemaining = usesMax;
-        rb = PlayerManager.GetRigidbody();
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     void FixedUpdate()
@@ -85,11 +85,11 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
             recoveryTimeRemaining -= Time.fixedDeltaTime;
             if (recoveryTimeRemaining <= 0) 
             {
-                Collider[] colls = Physics.OverlapCapsule(PlayerManager.GetTransform().position, PlayerManager.GetTransform().position + 2 * PlayerManager.GetTransform().up, 0.5f);
+                Collider[] colls = Physics.OverlapCapsule(transform.position, transform.position + 2 * transform.up, 0.5f);
                 foreach (Collider c in colls)
                 {
                     //TODO: This is an incredibly ugly solution, there has to be a better way. If this part is taken out, you can glitch through the ground when you use the hook at the wrong angle.
-                    PlayerManager.GetTransform().Translate(0, c.ClosestPointOnBounds(PlayerManager.GetTransform().position + 999 * Vector3.up).y - PlayerManager.GetTransform().position.y, 0);
+                    transform.Translate(0, c.ClosestPointOnBounds(transform.position + 999 * Vector3.up).y - transform.position.y, 0);
                 }
             }
         }
@@ -101,19 +101,19 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
                 targetLocation += targetCharacter.transform.position - targetCharacterOriginalPosition;
                 targetCharacterOriginalPosition = targetCharacter.transform.position;
                 abilityUseTimeRemaining = (targetLocation - Camera.main.transform.position).magnitude / speed;
-                PlayerManager.GetMotor().LockMovement(abilityUseTimeRemaining);
+                gameObject.GetComponent<PlayerMotor>().LockMovement(abilityUseTimeRemaining);
             }
 
             abilityUseTimeRemaining -= Time.fixedDeltaTime;
         
             Vector3 diff = targetLocation - Camera.main.transform.position;
-            Vector3 newPos = PlayerManager.GetTransform().position + speed * Time.fixedDeltaTime * (diff).normalized;
+            Vector3 newPos = transform.position + speed * Time.fixedDeltaTime * (diff).normalized;
             rb.MovePosition(newPos);
             
             if (diff.magnitude <= 1.5f)
             {
                 rb.useGravity = true;
-                PlayerManager.GetCollider().isTrigger = false;
+                gameObject.GetComponent<Collider>().isTrigger = false;
 
                 abilityUseTimeRemaining = 0;
                 if (targetCharacter != null) 
@@ -131,6 +131,6 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     {
         Vulnerable v = other.GetComponent<Vulnerable>();
         if(v != null)
-            v.Knockback(PlayerManager.GetTransform().position, impact, stun);
+            v.Knockback(transform.position, impact, stun);
     }
 }

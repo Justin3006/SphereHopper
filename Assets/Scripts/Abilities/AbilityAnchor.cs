@@ -45,7 +45,7 @@ public class AbilityAnchor : MonoBehaviour, IAbility
 
         abilityUseTimeRemaining = abilityUseTimeMax;
         if (!saved)
-            savedPosition = PlayerManager.GetTransform().position;
+            savedPosition = transform.position;
         else
             usesRemaining--;
 
@@ -68,7 +68,7 @@ public class AbilityAnchor : MonoBehaviour, IAbility
             {
                 if (saved)
                 {
-                    PlayerManager.GetTransform().position = savedPosition;
+                    transform.position = savedPosition;
                 }
                 saved = !saved;
             }

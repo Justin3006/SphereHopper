@@ -64,9 +64,10 @@ public class AbilityGear : MonoBehaviour, IAbility
             if (abilityUseTimeRemaining <= 0) 
             {
                 buffTimeRemaining = buffTimeMax;
-                PlayerManager.GetMotor().SetAttackStunModifier(1.5f);
-                PlayerManager.GetMotor().SetAttackImpactModifier(1.5f);
-                PlayerManager.GetMotor().SetGeneralSpeedModifier(2);
+
+                gameObject.GetComponent<PlayerMotor>().SetAttackStunModifier(1.5f);
+                gameObject.GetComponent<PlayerMotor>().SetAttackImpactModifier(1.5f);
+                gameObject.GetComponent<PlayerMotor>().SetGeneralSpeedModifier(2);
             }
         }
 
@@ -75,10 +76,9 @@ public class AbilityGear : MonoBehaviour, IAbility
             buffTimeRemaining -= Time.fixedDeltaTime;
             if (buffTimeRemaining < 0) 
             {
-                PlayerManager.GetMotor().SetAttackStunModifier(1);
-                PlayerManager.GetMotor().SetAttackImpactModifier(1);
-                PlayerManager.GetMotor().SetGeneralSpeedModifier(1);
-
+                gameObject.GetComponent<PlayerMotor>().SetAttackStunModifier(1);
+                gameObject.GetComponent<PlayerMotor>().SetAttackImpactModifier(1);
+                gameObject.GetComponent<PlayerMotor>().SetGeneralSpeedModifier(1);
             }
         }
     }

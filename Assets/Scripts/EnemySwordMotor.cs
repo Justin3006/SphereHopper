@@ -107,7 +107,7 @@ public class EnemySwordMotor : Vulnerable
         {
 
             // Set up variables
-            Vector3 playerPosition = PlayerManager.GetTransform().position;
+            Vector3 playerPosition = PlayerManager.GetPosition();
             Vector3 toPlayer = playerPosition - this.transform.position;
             Vector3 movDir = Quaternion.Inverse(transform.rotation) * toPlayer;
             float dist = movDir.magnitude;
@@ -242,7 +242,13 @@ public class EnemySwordMotor : Vulnerable
                 {
                     if (dist <= ATTACK_RANGE)
                     {
-                        PlayerManager.GetMotor().Hit(transform.position, 1, 0.1f);
+                        RaycastHit hit;
+                        if (Physics.Raycast(transform.position + transform.up, transform.forward, out hit, ATTACK_RANGE)) 
+                        {
+                            Vulnerable v = hit.collider.gameObject.GetComponent<Vulnerable>();
+                            if (v != null)
+                                v.Hit(transform.position, 1, 0.1f);
+                        }
                     }
                     weaponGFX.transform.localEulerAngles = new Vector3(75, 0, 0);
                 }

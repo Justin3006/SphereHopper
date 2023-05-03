@@ -213,7 +213,7 @@ public class EnemySwordMotor : Vulnerable
                 if (swordCD <= 0)
                 {
                     float rand = Random.Range(0f, 1f);
-                    if (rand < attackProbability * Time.fixedDeltaTime)
+                    if (rand < attackProbability)
                     {
                         swordCD = attackCDMax;
                         attackDuration = attackDurationMax;
@@ -221,6 +221,7 @@ public class EnemySwordMotor : Vulnerable
                     }
                     else
                     {
+                        //TODO: change parry so that it may choose to visibly "prepare" a parry. When prepared and a player enters attack range, it automatically parries.
                         rand = Random.Range(0f, 1f);
                         if (rand < parryProbability * Time.fixedDeltaTime)
                         {

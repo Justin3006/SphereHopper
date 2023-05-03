@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//TODO: Get rid of most of these methods. Abilities should get a reference to that stuff via the constructor (if needed at al, mostly not), only position (maybe rotation too in the future?) is relevant to enemies and should remain here 
 public class PlayerManager : MonoBehaviour
 {
     private static GameObject player;

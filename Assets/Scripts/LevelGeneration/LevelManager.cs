@@ -24,12 +24,18 @@ public class LevelManager : MonoBehaviour
 
         for (int i = 0; i < numberOfLevels; i++) 
         {
-            //levels.Add(new PlaceholderLevel(Random.Range(0, 10)));
-            //levels.Add(new LabyrinthLevel());
-            levels.Add(new ArenaLevel());
-            
+            int rn = Random.Range(0, 3);
+            switch (rn) 
+            {
+                case 0: levels.Add(new PlaceholderLevel()); break;
+                case 1: levels.Add(new LabyrinthLevel()); break;
+                case 2: levels.Add(new ArenaLevel()); break;
+            }
+
             //TODO: Find better way to place different levels
-            levelPositions.Add(i, new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), Random.Range(-20, 20)));
+            levelPositions.Add(i, new Vector3(Random.Range(-10, 10), Random.Range(-10, 5), Random.Range(-3, 10)));
+
+            //TODO: Define, which levels are connected
         }
     }
 

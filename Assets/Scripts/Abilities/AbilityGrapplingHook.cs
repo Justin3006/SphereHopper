@@ -118,7 +118,7 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
                 abilityUseTimeRemaining = 0;
                 if (targetCharacter != null) 
                 {
-                    targetCharacter.Knockback(transform.position, impact, stun);
+                    targetCharacter.Hit(transform.position, 0, 0, impact, stun);
                     targetCharacter = null;
                 }
                 recoveryTimeRemaining = recoveryTimeMax;
@@ -131,6 +131,6 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
     {
         Vulnerable v = other.GetComponent<Vulnerable>();
         if(v != null)
-            v.Knockback(transform.position, impact, stun);
+            v.Hit(transform.position, 0, 0, impact, stun);
     }
 }

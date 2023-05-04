@@ -237,7 +237,7 @@ public class PlayerMotor : Vulnerable
                     if (target != null)
                     {
                         hitIndicator.SetActive(true);
-                        target.Hit(transform.position, attackImpactModifier * attackImpact, attackStunModifier * attackStun);
+                        target.Hit(transform.position, 1, 0, attackImpactModifier * attackImpact, attackStunModifier * attackStun);
                     }
                 }
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);

@@ -7,6 +7,8 @@ public class Vulnerable : MonoBehaviour
 {
     [SerializeField]
     protected int maxHp = 3;
+    [SerializeField]
+    bool damageImmunity;
     protected int hp;
 
     protected bool shielded;
@@ -48,7 +50,7 @@ public class Vulnerable : MonoBehaviour
         handleDmgIndicator();
     }
 
-    public virtual bool Hit(Vector3 origin, float impact, float stun) 
+    public virtual bool Hit(Vector3 origin, int dmg, float addExecPerc, float impact, float stun) 
     {
         if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
         {
@@ -69,16 +71,24 @@ public class Vulnerable : MonoBehaviour
             damageIndicator.SetActive(true);
         }
 
+        Damage(dmg);
+        Execute(addExecPerc);
         Knockback(origin, impact, stun);
-
-        hp--;
-        if (hp <= 0)
-            Kill();
         
         return true;
     }
 
-    public virtual void Knockback(Vector3 origin, float impact, float stun) 
+    private void Damage(int dmg) 
+    {
+        if (damageImmunity)
+            return;
+
+        hp -= dmg;
+        if (hp <= 0)
+            Kill();
+    }
+
+    private void Knockback(Vector3 origin, float impact, float stun) 
     {
         if (knockbackImmunity)
             return;
@@ -88,7 +98,7 @@ public class Vulnerable : MonoBehaviour
         
     }
 
-    public void Execute(float addPercentage) 
+    private void Execute(float addPercentage) 
     {
         if (executeImmunity)
             return;

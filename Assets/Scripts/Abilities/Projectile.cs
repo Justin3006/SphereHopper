@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    float dmg = 15;
+    float execPerc = 15;
     float speed = 25;
+    float impact = 5;
+    float stun = 0.015f;
 
     // Update is called once per frame
     void FixedUpdate()
@@ -18,7 +20,8 @@ public class Projectile : MonoBehaviour
         Vulnerable target = other.gameObject.GetComponent<Vulnerable>();
         if (target != null) 
         {
-            target.Execute(dmg);
+            //TODO: change transform.position to something, that properly applies knockback
+            target.Hit(transform.position, 0, execPerc, impact, stun);
         }
         Destroy(gameObject);
     }

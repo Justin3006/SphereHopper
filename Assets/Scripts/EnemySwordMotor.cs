@@ -83,6 +83,7 @@ public class EnemySwordMotor : Vulnerable
         Random.InitState(System.DateTime.Now.Millisecond);
     }
 
+
     //SECTION: Regular Updates
     void FixedUpdate()
     {
@@ -247,7 +248,7 @@ public class EnemySwordMotor : Vulnerable
                         {
                             Vulnerable v = hit.collider.gameObject.GetComponent<Vulnerable>();
                             if (v != null)
-                                v.Hit(transform.position, 1, 0.1f);
+                                v.Hit(transform.position, 1, 0, 1, 0.1f);
                         }
                     }
                     weaponGFX.transform.localEulerAngles = new Vector3(75, 0, 0);
@@ -290,6 +291,7 @@ public class EnemySwordMotor : Vulnerable
             movLockTime -= Time.fixedDeltaTime;
         }
     }
+
 
     //SECTION: Support Methods
     public void SetChasing(bool chasing) 

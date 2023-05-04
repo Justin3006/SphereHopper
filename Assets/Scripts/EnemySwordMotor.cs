@@ -98,6 +98,9 @@ public class EnemySwordMotor : Vulnerable
         {
             movLockTime = stun;
             stun = 0;
+            attackDuration = 0;
+            parryDuration = 0;
+            
             //TODO: Change directedImpact.magnitude/3 * transform.up for something that scales better with different impact and stun values
             rb.velocity = directedImpact + directedImpact.magnitude/3 * transform.up;
         }

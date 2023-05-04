@@ -248,6 +248,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 3
+  damageImmunity: 0
   damageIndicator: {fileID: 0}
   indicatorDurationMax: 0.2
   executeImmunity: 1
@@ -263,6 +264,7 @@ MonoBehaviour:
   dashDurationMax: 0.07
   dashCDMax: 0.6
   lockOnRange: 15
+  maxLockOnAngle: 20
   attackCDMax: 0.4
   attackDurationMax: 0.01
   parryCDMax: 0.6

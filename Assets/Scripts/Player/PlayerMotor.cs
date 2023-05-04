@@ -54,6 +54,8 @@ public class PlayerMotor : Vulnerable
 
     [SerializeField]
     float lockOnRange = 15;
+    [SerializeField]
+    float maxLockOnAngle = 20;
 
     //TODO: change "Vulnerable" to something more suitable
     Vulnerable lockOnTarget;
@@ -124,7 +126,15 @@ public class PlayerMotor : Vulnerable
         {
             // move position
             float dist = Time.fixedDeltaTime * movSpeed * generalSpeedModifier;
-            Vector3 desPos = transform.position + dist * movDir;
+            Vector3 desPos = transform.position + dist * (transform.rotation * movDir);
+            
+            if (lockOnTarget != null) 
+            {
+                float perc = dist * movDir.x / (2 * Mathf.PI * (lockOnTarget.transform.position - transform.position).magnitude);
+                //TODO: I'm too stupid to make the player run in circles
+                //desPos = transform.position + dist * (transform.rotation * (movDir.z * Vector3.forward + new Vector3(Mathf.Sin(perc * 360), 0, Mathf.Cos(perc * 360))));
+            }
+            
             if (walking && !Physics.Raycast(desPos, -transform.up, dist))
             {
                 Collider[] coll = Physics.OverlapSphere((desPos + transform.position) / 2, 0.05f + dist / 2);
@@ -136,6 +146,7 @@ public class PlayerMotor : Vulnerable
                     }
                 }
             }
+            
             rb.MovePosition(desPos);
 
             // rotate body
@@ -188,18 +199,18 @@ public class PlayerMotor : Vulnerable
                 movLockTime = dashDurationMax;
                 dashCD = dashCDMax;
                 dashIndicator.SetActive(false);
-                cam.fieldOfView = 61;
+                cam.fieldOfView *= 1.01f;
             }
         }
 
         //SUBSECTION: Dash
         if (dashDuration > 0)
         {
-            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * generalSpeedModifier * movDir);
+            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * generalSpeedModifier * (transform.rotation * movDir));
             dashDuration -= Time.fixedDeltaTime;
             if (dashDuration <= 0)
             {
-                cam.fieldOfView = 60;
+                cam.fieldOfView /= 1.01f;
             }
         }
 
@@ -222,7 +233,6 @@ public class PlayerMotor : Vulnerable
             float prev_y = cam.transform.eulerAngles.y;
             cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
             transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
-            movDir = Quaternion.Euler(0, cam.transform.eulerAngles.y - prev_y, 0) * movDir;
         }   
         
         // attack
@@ -272,7 +282,7 @@ public class PlayerMotor : Vulnerable
             float prev_y = cam.transform.eulerAngles.y;
             cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
             transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
-            movDir = Quaternion.Euler(0, cam.transform.eulerAngles.y - prev_y, 0) * movDir;
+            movDir = Quaternion.Euler(0, cam.transform.eulerAngles.y - prev_y, 0) * (transform.rotation * movDir);
         }
 
 
@@ -321,7 +331,7 @@ public class PlayerMotor : Vulnerable
     public void Move(Vector3 movDir)
     {
         if (movLockTime <= 0)
-            this.movDir = transform.rotation * movDir;
+            this.movDir = movDir;
     }
 
     public void Rotate(float rotDir) 
@@ -361,27 +371,28 @@ public class PlayerMotor : Vulnerable
             lockOnTarget = null;
             return;
         }
-        
-        //TODO: Lock on to target, even if it was slightly missed
 
-        RaycastHit hit;
+        Collider[] colls = Physics.OverlapSphere(cam.transform.position, lockOnRange);
 
-        // Raycast from the camera's position, only in the horizontal direction.
-        Vector3 horizontalDirection = new Vector3(cam.transform.forward.x, 0, cam.transform.forward.z).normalized;
-                
-        if (Physics.Raycast(cam.transform.position, horizontalDirection, out hit, lockOnRange))
+        Vulnerable closest = null;
+        foreach (Collider coll in colls) 
         {
-            Vulnerable newTarget = hit.collider.gameObject.GetComponent<Vulnerable>();
+            if (coll.gameObject == gameObject)
+                    continue;
 
-            if (newTarget != lockOnTarget)
+            Vulnerable next = coll.GetComponent<Vulnerable>();
+            if (next != null)
             {
-                lockOnTarget = newTarget;
+                float angle = Vector3.Angle(cam.transform.forward, next.transform.position - cam.transform.position);
+                if (angle <= maxLockOnAngle && (closest == null || (coll.gameObject.transform.position - cam.transform.position).magnitude < (closest.transform.position - cam.transform.position).magnitude))
+                    closest = next;
             }
-            
         }
 
-        //TODO: Maybe just straight up rework the entire mechanic? Attach empty Objects to each enemy, where you lock the camera onto?
-                
+        if (closest != lockOnTarget)
+        {
+            lockOnTarget = closest;
+        }                
     }
 
     //SUBSECTION: Combat

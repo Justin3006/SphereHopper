@@ -15,7 +15,6 @@ public class PlaceholderLevel : MonoBehaviour, ILevel
     public void LoadLevel()
     {
         Debug.Log("Placeholder Level Number: " + number);
-        GameObject levelLayout = Instantiate((GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject)));
-        levelLayout.GetComponent<TextMeshProUGUI>().text = number.ToString();
+        Instantiate((GameObject)Resources.Load("LevelGenerator/PlaceholderLevelLayout", typeof(GameObject)));
     }
 }

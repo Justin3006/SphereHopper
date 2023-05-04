@@ -260,13 +260,13 @@ MonoBehaviour:
   bonusJumpPower: 6
   bonusJumpsMax: 2
   dashSpeed: 30
-  dashDurationMax: 0.035
+  dashDurationMax: 0.07
   dashCDMax: 0.6
   lockOnRange: 15
   attackCDMax: 0.4
   attackDurationMax: 0.01
-  parryCDMax: 0.5
-  parryDurationMax: 0.25
+  parryCDMax: 0.6
+  parryDurationMax: 0.3
   distanceIndicator: {fileID: 0}
   dashIndicator: {fileID: 0}
   swordIndicator: {fileID: 0}

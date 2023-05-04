@@ -223,7 +223,7 @@ MonoBehaviour:
   movementXDurationMax: 10
   movementXContinue: 0
   attackCDMax: 1
-  attackDurationMax: 0.35
+  attackDurationMax: 0.45
   parryCDMax: 1.25
   parryDurationMax: 0.25
   attackProbability: 0.05

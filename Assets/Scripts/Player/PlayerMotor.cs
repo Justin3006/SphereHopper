@@ -249,16 +249,17 @@ public class PlayerMotor : Vulnerable
         {
             parryDuration -= Time.deltaTime;
 
-            if (shieldedAttacks >= 1) 
+            // reset cooldowns, if you blocked someone (for counter attacks)
+            if (shieldedAttacks == 1) 
             {
-                shielded = false;
-                parryDuration = 0;
                 swordCD = 0;
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, -200, 0);
             }
-            else if (parryDuration <= 0)
+            // reset when parry is done
+            if (parryDuration <= 0)
             {
                 shielded = false;
+                shieldedAttacks = 0;
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
         }

@@ -142,6 +142,7 @@ public class PlayerMotor : Vulnerable
                 // rotate now
                 cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
                 transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
+                //TODO: fix cam rotation here and in dash. It always lags behind, because it isn't handled via Rigidbodies, but I don't want to attach a Rigidbody to the cam
             }
 
             // if walking and no ground beneath desired position
@@ -210,6 +211,14 @@ public class PlayerMotor : Vulnerable
             // dash
             if (dash)
             {
+                //TODO: prevent dash from going through thin walls (noticable in the labyrinth)
+                /*RaycastHit h;
+                float timer = dashDurationMax;
+                if (Physics.Raycast(transform.position + transform.up, movDir, out h, dashDurationMax * dashSpeed * generalSpeedModifier)) 
+                {
+                    Vector3 target = h.point - transform.up - movDir/2;
+                    timer = (target - transform.position).magnitude/(dashDurationMax * dashSpeed * generalSpeedModifier) * dashDurationMax;
+                }*/
                 dashDuration = dashDurationMax;
                 movLockTime = dashDurationMax;
                 dashCD = dashCDMax;

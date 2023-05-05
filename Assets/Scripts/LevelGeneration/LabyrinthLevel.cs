@@ -8,6 +8,9 @@ public class LabyrinthLevel : MonoBehaviour, ILevel
     bool[,] deleteWallZ = new bool[21,20];
     bool[,] deleteWallX = new bool[20,21];
     Vector3 goalPost;
+    Vector3 stalkerPosition1;
+    Vector3 stalkerPosition2;
+    Vector3 stalkerPosition3;
 
 
     public LabyrinthLevel() 
@@ -20,6 +23,27 @@ public class LabyrinthLevel : MonoBehaviour, ILevel
             case 1: goalPost = new Vector3(-50, 0, 50); break;
             case 2: goalPost = new Vector3(50, 0, -50); break;
             case 3: goalPost = new Vector3(50, 0, 50); break;
+        }
+        switch (rn)
+        {
+            case 0: stalkerPosition1 = new Vector3(50, 0, 50); break;
+            case 1: stalkerPosition1 = new Vector3(50, 0, -50); break;
+            case 2: stalkerPosition1 = new Vector3(-50, 0, 50); break;
+            case 3: stalkerPosition1 = new Vector3(-50, 0, -50); break;
+        }
+        switch (rn)
+        {
+            case 0: stalkerPosition2 = new Vector3(-50, 0, 50); break;
+            case 1: stalkerPosition2 = new Vector3(50, 0, 50); break;
+            case 2: stalkerPosition2 = new Vector3(-50, 0, -50); break;
+            case 3: stalkerPosition2 = new Vector3(50, 0, -50); break;
+        }
+        switch (rn)
+        {
+            case 0: stalkerPosition3 = new Vector3(50, 0, -50); break;
+            case 1: stalkerPosition3 = new Vector3(-50, 0, -50); break;
+            case 2: stalkerPosition3 = new Vector3(50, 0, 50); break;
+            case 3: stalkerPosition3 = new Vector3(-50, 0, 50); break;
         }
     }
 
@@ -85,5 +109,8 @@ public class LabyrinthLevel : MonoBehaviour, ILevel
                     newTile.transform.Find("WallS").gameObject.SetActive(false);
             }
         Instantiate((GameObject)Resources.Load("LevelGenerator/Transporter", typeof(GameObject)), goalPost, Quaternion.Euler(0, 0, 0));
+        Instantiate((GameObject)Resources.Load("Enemies/EnemyLabyrinthStalker", typeof(GameObject)), stalkerPosition1, Quaternion.Euler(0, 0, 0));
+        Instantiate((GameObject)Resources.Load("Enemies/EnemyLabyrinthStalker", typeof(GameObject)), stalkerPosition2, Quaternion.Euler(0, 0, 0));
+        Instantiate((GameObject)Resources.Load("Enemies/EnemyLabyrinthStalker", typeof(GameObject)), stalkerPosition3, Quaternion.Euler(0, 0, 0));
     }
 }

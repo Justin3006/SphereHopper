@@ -128,15 +128,26 @@ public class PlayerMotor : Vulnerable
             float dist = Time.fixedDeltaTime * movSpeed * generalSpeedModifier;
             Vector3 desPos = transform.position + dist * (transform.rotation * movDir);
             
+            // if locked on
             if (lockOnTarget != null) 
             {
+                // angle at which to move sideways
                 float perc = dist * movDir.x / (2 * Mathf.PI * (lockOnTarget.transform.position - transform.position).magnitude);
-                //TODO: I'm too stupid to make the player run in circles
-                //desPos = transform.position + dist * (transform.rotation * (movDir.z * Vector3.forward + new Vector3(Mathf.Sin(perc * 360), 0, Mathf.Cos(perc * 360))));
+                // create dummy to perform the movement first, then copy his position
+                GameObject dummy = new GameObject();
+                GameObject liveDummy = Instantiate(dummy, transform.position, transform.rotation);
+                liveDummy.transform.RotateAround(lockOnTarget.transform.position, transform.up, -perc * 360);
+                desPos = liveDummy.transform.position + dist * movDir.z * transform.forward;
+                Destroy(liveDummy);
+                // rotate now
+                cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
+                transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
             }
-            
+
+            // if walking and no ground beneath desired position
             if (walking && !Physics.Raycast(desPos, -transform.up, dist))
             {
+                // search for close edges and find the position closest to the desired posiiton without stepping off the edge
                 Collider[] coll = Physics.OverlapSphere((desPos + transform.position) / 2, 0.05f + dist / 2);
                 foreach (Collider c in coll) 
                 {
@@ -159,10 +170,12 @@ public class PlayerMotor : Vulnerable
                 float camRotChange = -Time.fixedDeltaTime * camRotSpeed * camRotDir;
                 float newCamRot = camRotChange + cam.transform.rotation.eulerAngles.x;
 
+                //check for upper and lower limits
                 if (newCamRot < 270 && newCamRot >= 180)
                     cam.transform.LookAt(cam.transform.position + transform.up, -transform.forward);
                 else if (newCamRot > 90 && newCamRot < 180)
                     cam.transform.LookAt(cam.transform.position - transform.up, transform.forward);
+                // perform the normal rotation
                 else
                 {
                     float targetCamRotationX = cam.transform.rotation.eulerAngles.x + camRotChange;
@@ -171,6 +184,7 @@ public class PlayerMotor : Vulnerable
             }
 
             // jump
+            // grant some buffer for the first jump, when walking off edges
             if (Physics.Raycast(transform.position + 0.01f * transform.up, -transform.up, 0.1f))
             {
                 grounded = true;
@@ -179,6 +193,7 @@ public class PlayerMotor : Vulnerable
             else if (untilUngrounded <= 0)
                 untilUngrounded = untilUngroundedMax;
 
+            // perform the jump
             if (jump)
             {
                 if (grounded)
@@ -206,7 +221,29 @@ public class PlayerMotor : Vulnerable
         //SUBSECTION: Dash
         if (dashDuration > 0)
         {
-            rb.MovePosition(transform.position + Time.fixedDeltaTime * dashSpeed * generalSpeedModifier * (transform.rotation * movDir));
+            float dist = Time.fixedDeltaTime * dashSpeed * generalSpeedModifier;
+            Vector3 desPos = transform.position + dist * (transform.rotation * movDir);
+            
+            // if locked on
+            if (lockOnTarget != null)
+            {
+                // angle at which to move sideways
+                float perc = dist * movDir.x / (2 * Mathf.PI * (lockOnTarget.transform.position - transform.position).magnitude);
+                // create dummy to perform the movement first, then copy his position
+                GameObject dummy = new GameObject();
+                GameObject liveDummy = Instantiate(dummy, transform.position, transform.rotation);
+                liveDummy.transform.RotateAround(lockOnTarget.transform.position, transform.up, -perc * 360);
+                desPos = liveDummy.transform.position + dist * movDir.z * transform.forward;
+                Destroy(liveDummy);
+                // rotate now
+                cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
+                transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
+            }
+
+            // perfrom movement 
+            rb.MovePosition(desPos);
+
+            // end movement
             dashDuration -= Time.fixedDeltaTime;
             if (dashDuration <= 0)
             {
@@ -226,14 +263,6 @@ public class PlayerMotor : Vulnerable
             distancePercent = hit.distance / ATTACK_RANGE;
         }
         distanceIndicator.GetComponent<RectTransform>().localScale = new Vector3(distancePercent, distancePercent, 1);
-
-        //TODO: Fix keeping the correct distance to the locked-on target when moving sideways as well as compatibility with dash (possibly the same thing)
-        if (lockOnTarget != null)
-        {
-            float prev_y = cam.transform.eulerAngles.y;
-            cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
-            transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
-        }   
         
         // attack
         if (attackDuration > 0) 
@@ -272,17 +301,6 @@ public class PlayerMotor : Vulnerable
                 shieldedAttacks = 0;
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
             }
-        }
-
-
-        //SUBSECTION: Lock On
-        //TODO: Fix keeping the correct distance to the locked on target when moving sideways as well as compatibility with dash (possibly the same thing)
-        if (lockOnTarget != null)
-        {
-            float prev_y = cam.transform.eulerAngles.y;
-            cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
-            transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
-            movDir = Quaternion.Euler(0, cam.transform.eulerAngles.y - prev_y, 0) * (transform.rotation * movDir);
         }
 
 
@@ -372,6 +390,7 @@ public class PlayerMotor : Vulnerable
             return;
         }
 
+        //TODO: Maybe replace with GameObject.Find methods to limit the search to enemies immediately. Might be more efficient.
         Collider[] colls = Physics.OverlapSphere(cam.transform.position, lockOnRange);
 
         Vulnerable closest = null;

@@ -55,9 +55,11 @@ public class AbilityDischarge : MonoBehaviour, IAbility
         return true;
     }
 
-    public void ResetUses() 
+    public void AddUses(int uses) 
     {
-        usesRemaining = usesMax;
+        usesRemaining += uses;
+        if (usesRemaining > usesMax)
+            usesRemaining = usesMax;
     }
 
     // Start is called before the first frame update

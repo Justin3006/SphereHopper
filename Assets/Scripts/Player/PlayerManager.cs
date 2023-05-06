@@ -15,4 +15,13 @@ public class PlayerManager : MonoBehaviour
     {
         return new Vector3(player.transform.position.x, player.transform.position.y, player.transform.position.z);
     }
+
+    public static void AddUsesToAbilities(int uses)
+    {
+        IAbility[] abilities = player.GetComponents<IAbility>();
+        foreach (IAbility a in abilities) 
+        {
+            a.AddUses(uses);
+        }
+    }
 }

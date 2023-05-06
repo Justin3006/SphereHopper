@@ -107,8 +107,6 @@ public class PlayerMotor : Vulnerable
         equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
         equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
         equippedAbilities[2] = gameObject.AddComponent<AbilityGear>();
-        //TODO: Reset uses somewhere in the base, or maybe add an interactable for it
-        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesMax() + " uses left";
         bonusJumpsRemaining = bonusJumpsMax;
     }
 
@@ -121,6 +119,7 @@ public class PlayerMotor : Vulnerable
             rb.velocity = rb.velocity.y * Vector3.up;
             rb.useGravity = true;
         }
+
 
         //SUBSECTION: Direct Inputs
         if (movLockTime <= 0)
@@ -314,7 +313,7 @@ public class PlayerMotor : Vulnerable
         }
 
 
-        //SUBSECTION: Cooldowns
+        //SUBSECTION: Cooldowns & Similar
         if (untilUngrounded > 0) 
         {
             untilUngrounded -= Time.fixedDeltaTime;
@@ -347,6 +346,8 @@ public class PlayerMotor : Vulnerable
         }
 
         handleDmgIndicator();
+        abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesRemaining() + " uses left";
+
 
         //SUBSECTION: Reset Notifications
         jump = false;

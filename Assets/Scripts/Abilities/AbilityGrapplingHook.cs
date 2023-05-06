@@ -72,9 +72,11 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
         return true;
     }
 
-    public void ResetUses()
+    public void AddUses(int uses)
     {
-        usesRemaining = usesMax;
+        usesRemaining += uses;
+        if (usesRemaining > usesMax)
+            usesRemaining = usesMax;
     }
 
     void Start()

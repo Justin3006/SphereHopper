@@ -37,5 +37,5 @@ public interface IAbility
     /// <summary>
     /// Resets number of uses remaining
     /// </summary>
-    public void ResetUses();
+    public void AddUses(int uses);
 }

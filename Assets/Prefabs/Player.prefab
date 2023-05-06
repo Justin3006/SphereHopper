@@ -251,7 +251,7 @@ MonoBehaviour:
   damageImmunity: 0
   damageIndicator: {fileID: 0}
   indicatorDurationMax: 0.2
-  executeImmunity: 1
+  executeImmunity: 0
   knockbackImmunity: 0
   movSpeed: 7
   rotSpeed: 360

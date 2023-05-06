@@ -8,7 +8,7 @@ using UnityEngine;
 public class AbilityAnchor : MonoBehaviour, IAbility
 {
     const int usesMax = 3;
-    int usesRemaining;
+    static int usesRemaining;
     const float abilityUseTimeMax = 0.5f;
     float abilityUseTimeRemaining;
     Vector3 savedPosition;
@@ -52,8 +52,7 @@ public class AbilityAnchor : MonoBehaviour, IAbility
         return true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void ResetUses()
     {
         usesRemaining = usesMax;
     }

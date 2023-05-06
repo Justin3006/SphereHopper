@@ -8,7 +8,7 @@ using UnityEngine;
 public class AbilityGrapplingHook : MonoBehaviour, IAbility
 {
     const int usesMax = 10;
-    int usesRemaining;
+    static int usesRemaining;
     float abilityUseTimeRemaining;
     // recovery time prevents you from glitching through walls too easily
     float recoveryTimeMax = 0.1f;
@@ -72,9 +72,13 @@ public class AbilityGrapplingHook : MonoBehaviour, IAbility
         return true;
     }
 
-    void Start()
+    public void ResetUses()
     {
         usesRemaining = usesMax;
+    }
+
+    void Start()
+    {
         rb = gameObject.GetComponent<Rigidbody>();
     }
 

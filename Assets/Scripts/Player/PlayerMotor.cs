@@ -107,6 +107,7 @@ public class PlayerMotor : Vulnerable
         equippedAbilities[0] = gameObject.AddComponent<AbilityDischarge>();
         equippedAbilities[1] = gameObject.AddComponent<AbilityGrapplingHook>();
         equippedAbilities[2] = gameObject.AddComponent<AbilityGear>();
+        //TODO: Reset uses somewhere in the base, or maybe add an interactable for it
         abilityText.GetComponent<TextMeshProUGUI>().text = equippedAbilities[selectedAbility].GetName() + "\n" + equippedAbilities[selectedAbility].GetUsesMax() + " uses left";
         bonusJumpsRemaining = bonusJumpsMax;
     }

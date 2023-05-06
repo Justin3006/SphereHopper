@@ -8,7 +8,7 @@ using UnityEngine;
 public class AbilityGear : MonoBehaviour, IAbility
 {
     const int usesMax = 2;
-    int usesRemaining;
+    static int usesRemaining;
     const float abilityUseTimeMax = 0.5f;
     float abilityUseTimeRemaining;
     const float buffTimeMax = 10;
@@ -49,8 +49,7 @@ public class AbilityGear : MonoBehaviour, IAbility
         return true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void ResetUses()
     {
         usesRemaining = usesMax;
     }

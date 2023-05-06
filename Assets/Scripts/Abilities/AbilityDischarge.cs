@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public class AbilityDischarge : MonoBehaviour, IAbility
 {
-    int usesMax = 3;
-    int usesRemaining;
-    float abilityUseTimeMax = 7 * 0.15f;
+    const int usesMax = 3;
+    static int usesRemaining;
+    const float abilityUseTimeMax = 7 * 0.15f;
     float abilityUseTimeRemaining;
     
     GameObject projectile;
@@ -55,11 +55,15 @@ public class AbilityDischarge : MonoBehaviour, IAbility
         return true;
     }
 
+    public void ResetUses() 
+    {
+        usesRemaining = usesMax;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        usesRemaining = usesMax;
-        //TODO: Change object path
+        //TODO: Change object path to something like "Prefabs/Abilities/Projectile"
         projectile = (GameObject)Resources.Load("Projectile", typeof(GameObject));
     }
 

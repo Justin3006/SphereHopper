@@ -33,4 +33,9 @@ public interface IAbility
     /// </summary>
     /// <returns>the name of the ability</returns>
     public string GetName();
+
+    /// <summary>
+    /// Resets number of uses remaining
+    /// </summary>
+    public void ResetUses();
 }

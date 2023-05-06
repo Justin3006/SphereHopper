@@ -78,13 +78,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 3
-  damageImmunity: 0
+  damageImmunity: 1
   damageIndicator: {fileID: 0}
   indicatorDurationMax: 0.2
-  executeImmunity: 0
-  knockbackImmunity: 0
-  speed: 2.5
+  executeImmunity: 1
+  knockbackImmunity: 1
+  normalSpeed: 2.5
+  aggressionSpeed: 7.5
   maxRangeToTravel: 5
+  detectionAngle: 45
 --- !u!1 &809220258342925455
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,9 +7,9 @@ using UnityEngine;
 /// </summary>
 public class AbilityPlaceholder : MonoBehaviour, IAbility 
 {
-    int usesMax = 0;
-    int usesRemaining;
-    float abilityUseTimeMax = 0;
+    const int usesMax = 0;
+    static int usesRemaining;
+    const float abilityUseTimeMax = 0;
     float abilityUseTimeRemaining;
 
 
@@ -46,8 +46,7 @@ public class AbilityPlaceholder : MonoBehaviour, IAbility
         return true;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void ResetUses()
     {
         usesRemaining = usesMax;
     }

@@ -19,5 +19,6 @@ public class ArenaLevel : MonoBehaviour, ILevel
     {
         GameObject o = Instantiate((GameObject)Resources.Load("LevelGenerator/ArenaBaseTile", typeof(GameObject)));
         o.GetComponent<ArenaSpawn>().ArenaSettings(enemies, (GameObject)Resources.Load("LevelGenerator/Transporter", typeof(GameObject)));
+        Instantiate((GameObject)Resources.Load("LevelGenerator/LowerBorderTile", typeof(GameObject)), - 20 * transform.up, Quaternion.Euler(0,0,0));
     }
 }

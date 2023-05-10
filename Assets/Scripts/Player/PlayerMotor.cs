@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMotor : Vulnerable
@@ -512,6 +513,12 @@ public class PlayerMotor : Vulnerable
     public void SetAttackStunModifier(float modifier) 
     {
         attackStunModifier = modifier;
+    }
+
+    protected override void Kill()
+    {
+        SceneManager.LoadScene(0);
+        PlayerManager.AddUsesToAbilities(999);
     }
 }
 

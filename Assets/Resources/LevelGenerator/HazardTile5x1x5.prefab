@@ -26,8 +26,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3985023655858783030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -5, z: 0}
-  m_LocalScale: {x: 10000, y: 10, z: 10000}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3985023655932060409}
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5196e4f3e67a3294abdb406b4bee2944, type: 2}
+  - {fileID: 2100000, guid: 72dd7da5a7ffb364f8ba01fe27f11ec2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 3985023655932060408}
   - component: {fileID: 8968311119867492849}
   m_Layer: 0
-  m_Name: LowerBorderTile
+  m_Name: HazardTile5x1x5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -128,7 +128,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 10000, y: 10, z: 10000}
+  m_Size: {x: 5, y: 1, z: 5}
   m_Center: {x: 0, y: -5, z: 0}
 --- !u!114 &8968311119867492849
 MonoBehaviour:
@@ -144,5 +144,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeTillHitMax: 1
   startOnCDActive: 0
-  damage: 0
-  execution: 100
+  damage: 1
+  execution: 0

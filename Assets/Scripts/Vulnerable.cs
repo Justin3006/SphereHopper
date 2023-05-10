@@ -50,7 +50,7 @@ public class Vulnerable : MonoBehaviour
         handleDmgIndicator();
     }
 
-    public virtual bool Hit(Vector3 origin, int dmg, float addExecPerc, float impact, float stun) 
+    public bool Hit(Vector3 origin, int dmg, float addExecPerc, float impact, float stun) 
     {
         if (shielded && Vector3.Dot(transform.forward, origin - transform.position) > 0)
         {
@@ -108,11 +108,8 @@ public class Vulnerable : MonoBehaviour
             Kill();
     }
 
-    private void Kill()
+    protected virtual void Kill()
     {
-        if (gameObject.name != "Player")
-            Destroy(gameObject);
-        else
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        Destroy(gameObject);
     }
 }

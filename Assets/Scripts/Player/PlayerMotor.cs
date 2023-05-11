@@ -140,6 +140,7 @@ public class PlayerMotor : Vulnerable
                 liveDummy.transform.RotateAround(lockOnTarget.transform.position, transform.up, -perc * 360);
                 desPos = liveDummy.transform.position + dist * movDir.z * transform.forward;
                 Destroy(liveDummy);
+                Destroy(dummy);
                 // rotate now
                 cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
                 transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
@@ -245,6 +246,7 @@ public class PlayerMotor : Vulnerable
                 liveDummy.transform.RotateAround(lockOnTarget.transform.position, transform.up, -perc * 360);
                 desPos = liveDummy.transform.position + dist * movDir.z * transform.forward;
                 Destroy(liveDummy);
+                Destroy(dummy);
                 // rotate now
                 cam.transform.LookAt(lockOnTarget.gameObject.GetComponent<Collider>().ClosestPoint(cam.transform.position));
                 transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);

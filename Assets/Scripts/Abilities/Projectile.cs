@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    [SerializeField]
+    int damage = 0;
+    [SerializeField]
     float execPerc = 15;
+    [SerializeField]
     float speed = 25;
+    [SerializeField]
     float impact = 5;
+    [SerializeField]
     float stun = 0.015f;
 
     // Update is called once per frame
@@ -21,7 +27,7 @@ public class Projectile : MonoBehaviour
         if (target != null) 
         {
             //TODO: change transform.position to something, that properly applies knockback
-            target.Hit(transform.position, 0, execPerc, impact, stun);
+            target.Hit(transform.position, damage, execPerc, impact, stun);
         }
         Destroy(gameObject);
     }

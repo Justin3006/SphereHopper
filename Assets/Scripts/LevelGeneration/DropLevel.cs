@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DropLevel : MonoBehaviour, ILevel
-{
-    //TODO: Add ranged enemies (the player should have to dodge a bullet rain)
+{ 
     List<GameObject> tiles = new List<GameObject>();
     List<Vector3> tilePositions = new List<Vector3>();
     //TODO: generate a Transporter at the end of the level
     Vector3 goalPost;
+    //TODO: rethink, if there should really be enemies in this level
+    int maxNumberOfEnemies = 3;
+    List<Vector3> enemyPositions = new List<Vector3>();
     //TODO: cap the total amount of tiles in one layer
     int maxLayer = 10;
     float avgDistanceBetweenLayers = 10;
@@ -31,6 +33,16 @@ public class DropLevel : MonoBehaviour, ILevel
                 lowest = i;
         }
         goalPost = tilePositions[lowest];
+
+        int numberOfEnemies = Random.Range(0, maxNumberOfEnemies);
+        for (int i = 0; i < numberOfEnemies; i++) 
+        {
+            //TODO: better place the enemies
+            float x = Random.Range(-50, 50);
+            float z = Random.Range(-50, 50);
+
+            enemyPositions.Add(new Vector3(x, 20, z));
+        }
     }
 
     private void BuildLevel(Vector3 startPos, int layer) 
@@ -69,5 +81,9 @@ public class DropLevel : MonoBehaviour, ILevel
         }
         Instantiate((GameObject)Resources.Load("LevelGenerator/Transporter", typeof(GameObject)), goalPost, Quaternion.Euler(0, 0, 0));
         Instantiate((GameObject)Resources.Load("LevelGenerator/LowerBorderTile", typeof(GameObject)), new Vector3(0, goalPost.y - 50, 0), Quaternion.Euler(0, 0, 0));
+        foreach (Vector3 pos in enemyPositions) 
+        {
+            Instantiate((GameObject)Resources.Load("Enemies/EnemySentry", typeof(GameObject)), pos, Quaternion.Euler(0, 0, 0));
+        }
     }
 }

@@ -252,6 +252,17 @@ public class PlayerMotor : Vulnerable
                 transform.eulerAngles = new Vector3(0, cam.transform.eulerAngles.y, 0);
             }
 
+            //Check, if something is in the way
+            Collider[] inTheWay = Physics.OverlapCapsule(desPos + 0.75f * transform.up, desPos + 2 * transform.up, 0.5f);
+            foreach (Collider c in inTheWay) 
+            {
+                if (c.gameObject.name != "Player")
+                {
+                    desPos = transform.position;
+                    dashDuration = 0;
+                }
+            }
+
             // perfrom movement 
             rb.MovePosition(desPos);
 

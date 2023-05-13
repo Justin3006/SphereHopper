@@ -11,6 +11,9 @@ public class ArenaSpawn : MonoBehaviour
     List<GameObject> currentEnemies = new List<GameObject>();
     GameObject reward;
     int spawnerDistance = 21;
+    //TODO: implement timer before enemies spawn
+    float spawnTimerMax = 2.5f;
+    float spawnTimerRemaining;
 
     // Update is called once per frame
     void FixedUpdate()

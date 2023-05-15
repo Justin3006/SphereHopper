@@ -49,6 +49,9 @@ public class EnemySentry : Vulnerable
                 Vector3 dir = (PlayerManager.GetPosition() + Vector3.up - (head + transform.position)).normalized;
                 GameObject o = Instantiate(projectile, head + transform.position + dir, Quaternion.Euler(0, 0, 0));
                 o.transform.LookAt(PlayerManager.GetPosition() + Vector3.up);
+                float randX = Random.Range(-spreadAngleMax, spreadAngleMax);
+                float randY = Random.Range(-spreadAngleMax, spreadAngleMax);
+                o.transform.eulerAngles += new Vector3(randX, randY, 0);
 
                 projectilesToFire--;
                 projectileCD = projectileCDMax;

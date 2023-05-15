@@ -213,14 +213,6 @@ public class PlayerMotor : Vulnerable
             // dash
             if (dash)
             {
-                //TODO: prevent dash from going through thin walls (noticable in the labyrinth)
-                /*RaycastHit h;
-                float timer = dashDurationMax;
-                if (Physics.Raycast(transform.position + transform.up, movDir, out h, dashDurationMax * dashSpeed * generalSpeedModifier)) 
-                {
-                    Vector3 target = h.point - transform.up - movDir/2;
-                    timer = (target - transform.position).magnitude/(dashDurationMax * dashSpeed * generalSpeedModifier) * dashDurationMax;
-                }*/
                 dashDuration = dashDurationMax;
                 movLockTime = dashDurationMax;
                 dashCD = dashCDMax;

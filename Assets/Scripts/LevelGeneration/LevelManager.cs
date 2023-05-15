@@ -25,14 +25,14 @@ public class LevelManager : MonoBehaviour
         for (int i = 0; i < numberOfLevels; i++) 
         {
             int rn = Random.Range(0, 4);
-            switch (rn) 
+            /*switch (rn) 
             {
                 case 0: levels.Add(new PlaceholderLevel()); break;
                 case 1: levels.Add(new LabyrinthLevel()); break;
                 case 2: levels.Add(new ArenaLevel()); break;
                 case 3: levels.Add(new DropLevel()); break;
-            }
-            //levels.Add(new DropLevel());
+            }*/
+            levels.Add(new DropLevel());
 
             //TODO: Find better way to place different levels
             levelPositions.Add(i, new Vector3(Random.Range(-10, 10), Random.Range(-10, 5), Random.Range(-3, 10)));

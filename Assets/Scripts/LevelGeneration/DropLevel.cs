@@ -9,8 +9,8 @@ public class DropLevel : MonoBehaviour, ILevel
     //TODO: generate a Transporter at the end of the level
     Vector3 goalPost;
     //TODO: rethink, if there should really be enemies in this level
-    int maxNumberOfEnemies = 3;
-    List<Vector3> enemyPositions = new List<Vector3>();
+    int maxNumberOfEnemies = 10;
+    List<int> enemyPositions = new List<int>();
     //TODO: cap the total amount of tiles in one layer
     int maxLayer = 10;
     float avgDistanceBetweenLayers = 10;
@@ -37,11 +37,10 @@ public class DropLevel : MonoBehaviour, ILevel
         int numberOfEnemies = Random.Range(0, maxNumberOfEnemies);
         for (int i = 0; i < numberOfEnemies; i++) 
         {
-            //TODO: better place the enemies
-            float x = Random.Range(-50, 50);
-            float z = Random.Range(-50, 50);
-
-            enemyPositions.Add(new Vector3(x, 20, z));
+            int tileIndex = Random.Range(1, tilePositions.Count);
+            if (enemyPositions.Contains(tileIndex) || tiles[tileIndex].name == "Hazard")
+                continue;
+            enemyPositions.Add(tileIndex);
         }
     }
 
@@ -78,12 +77,12 @@ public class DropLevel : MonoBehaviour, ILevel
         for (int i = 0; i < tiles.Count; i++) {
             GameObject o = Instantiate(tiles[i], tilePositions[i], Quaternion.Euler(0,0,0));
             o.transform.position = tilePositions[i];
+            if (enemyPositions.Contains(i)) 
+            {
+                Instantiate((GameObject)Resources.Load("Enemies/EnemySentry", typeof(GameObject)), tilePositions[i], Quaternion.Euler(0, 0, 0));
+            }
         }
         Instantiate((GameObject)Resources.Load("LevelGenerator/Transporter", typeof(GameObject)), goalPost, Quaternion.Euler(0, 0, 0));
         Instantiate((GameObject)Resources.Load("LevelGenerator/LowerBorderTile", typeof(GameObject)), new Vector3(0, goalPost.y - 50, 0), Quaternion.Euler(0, 0, 0));
-        foreach (Vector3 pos in enemyPositions) 
-        {
-            Instantiate((GameObject)Resources.Load("Enemies/EnemySentry", typeof(GameObject)), pos, Quaternion.Euler(0, 0, 0));
-        }
     }
 }

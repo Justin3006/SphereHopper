@@ -17,6 +17,12 @@ public class EnemyLabyrinthStalker : Vulnerable
     [SerializeField]
     float detectionAngle = 45;
     bool aggressive;
+    [SerializeField]
+    int blockLeftMax = 1;
+    [SerializeField]
+    int blockRightMax = 1;
+    [SerializeField]
+    int blockBackwardsMax = 3;
 
     // Start is called before the first frame update
     void Start()
@@ -64,15 +70,18 @@ public class EnemyLabyrinthStalker : Vulnerable
             }
 
             bool chosen = false;
+            int blockLeft = blockLeftMax;
+            int blockRight = blockRightMax;
+            int blockBackwards = blockBackwardsMax;
             while (!chosen)
             {
                 int rn = Random.Range(0, 4);
                 switch (rn)
                 {
                     case 0: if (dir[0]) { chosen = true; } break;
-                    case 1: if (dir[1]) { chosen = true; transform.Rotate(0, 90, 0); } break;
-                    case 2: if (dir[2]) { chosen = true; transform.Rotate(0, 180, 0); } break;
-                    case 3: if (dir[3]) { chosen = true; transform.Rotate(0, -90, 0); } break;
+                    case 1: if (dir[1]) { if (blockRight > 0) { blockRight--; break; } chosen = true; transform.Rotate(0, 90, 0); } break;
+                    case 2: if (dir[2]) { if (blockBackwards > 0) { blockBackwards--; break; } chosen = true; transform.Rotate(0, 180, 0); } break;
+                    case 3: if (dir[3]) { if (blockLeft > 0) { blockLeft--; break; } chosen = true; transform.Rotate(0, -90, 0); } break;
                 }
             }
 

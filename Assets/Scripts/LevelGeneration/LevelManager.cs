@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
                 case 2: levels.Add(new ArenaLevel()); break;
                 case 3: levels.Add(new DropLevel()); break;
             }*/
-            levels.Add(new DropLevel());
+            levels.Add(new LabyrinthLevel());
 
             //TODO: Find better way to place different levels
             levelPositions.Add(i, new Vector3(Random.Range(-10, 10), Random.Range(-10, 5), Random.Range(-3, 10)));

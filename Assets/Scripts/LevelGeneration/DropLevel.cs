@@ -6,18 +6,18 @@ public class DropLevel : MonoBehaviour, ILevel
 { 
     List<GameObject> tiles = new List<GameObject>();
     List<Vector3> tilePositions = new List<Vector3>();
-    //TODO: generate a Transporter at the end of the level
     Vector3 goalPost;
-    //TODO: rethink, if there should really be enemies in this level
-    int maxNumberOfEnemies = 10;
+
+    float maxPercentageOfEnemies = 0.33f;
     List<int> enemyPositions = new List<int>();
-    //TODO: cap the total amount of tiles in one layer
+
     int maxLayer = 10;
     float avgDistanceBetweenLayers = 10;
     float maxDistanceBetweenTiles = 20;
 
     int minTilesPerLayer = 1;
     int maxTilesPerLayer = 2;
+
 
     public DropLevel() 
     {
@@ -34,11 +34,11 @@ public class DropLevel : MonoBehaviour, ILevel
         }
         goalPost = tilePositions[lowest];
 
-        int numberOfEnemies = Random.Range(0, maxNumberOfEnemies);
+        int numberOfEnemies = Random.Range(0, (int)(maxPercentageOfEnemies * tiles.Count));
         for (int i = 0; i < numberOfEnemies; i++) 
         {
             int tileIndex = Random.Range(1, tilePositions.Count);
-            if (enemyPositions.Contains(tileIndex) || tiles[tileIndex].name == "Hazard")
+            if (enemyPositions.Contains(tileIndex) || tiles[tileIndex].GetComponent<Hazard>() != null)
                 continue;
             enemyPositions.Add(tileIndex);
         }
@@ -49,7 +49,6 @@ public class DropLevel : MonoBehaviour, ILevel
         int numOfTIles = Random.Range(minTilesPerLayer, maxTilesPerLayer + 1);
         for (int i = 0; i < numOfTIles; i++) 
         {
-            //TODO: Add different types of tiles
             int tileType = Random.Range(0, 2);
             switch (tileType) 
             {
@@ -57,8 +56,6 @@ public class DropLevel : MonoBehaviour, ILevel
                 case 1: tiles.Add((GameObject)Resources.Load("LevelGenerator/HazardTile5x1x5", typeof(GameObject))); break;
             }
             
-
-            //TODO: give the tiles a tendency for the direction
             int rn = Random.Range(-45, 45);
             float heightOffset = Random.Range(-avgDistanceBetweenLayers / 2, avgDistanceBetweenLayers / 2);
             float distanceOffset = Random.Range(0, maxDistanceBetweenTiles);

@@ -10,9 +10,10 @@ public class ArenaSpawn : MonoBehaviour
     List<GameObject[]> enemies;
     List<GameObject> currentEnemies = new List<GameObject>();
     GameObject reward;
+    GameObject spawnIndicator;
+    List<GameObject> activeIndicators = new List<GameObject>();
     int spawnerDistance = 21;
-    //TODO: implement timer before enemies spawn
-    float spawnTimerMax = 2.5f;
+    float spawnTimerMax = 2f;
     float spawnTimerRemaining;
 
     // Update is called once per frame
@@ -30,55 +31,76 @@ public class ArenaSpawn : MonoBehaviour
                     noEnemies = false;
             }
 
-            if (noEnemies) {
-                if (enemies.Count == 0)
+            if (noEnemies)
+            {
+                if (spawnTimerRemaining <= 0)
                 {
-                    cleared = true;
-                    Instantiate(reward, Vector3.zero, Quaternion.Euler(0, 0, 0));
-                    return;
-                }
+                    spawnTimerRemaining = spawnTimerMax;
 
-                currentEnemies.Clear();
-                GameObject[] enemiesToSpawn = enemies[0];
-                bool[] spawnUsed = new bool[4];
+                    currentEnemies.Clear();
+                    GameObject[] enemiesToSpawn = enemies[0];
+                    bool[] spawnUsed = new bool[4];
 
-                foreach (GameObject enemy in enemiesToSpawn)
-                {
-                    bool spawned = false;
-
-                    while (!spawned)
+                    foreach (GameObject enemy in enemiesToSpawn)
                     {
-                        int rn = Random.Range(0, 4);
-                        if (spawnUsed[rn])
-                            continue;
+                        bool spawned = false;
 
-                        spawned = true;
-                        spawnUsed[rn] = true;
-
-                        switch (rn)
+                        while (!spawned)
                         {
-                            case 0: currentEnemies.Add(Instantiate(enemy, new Vector3(-spawnerDistance, 0, 0), Quaternion.Euler(0, 0, 0))); break;
-                            case 1: currentEnemies.Add(Instantiate(enemy, new Vector3(spawnerDistance, 0, 0), Quaternion.Euler(0, 0, 0))); break;
-                            case 2: currentEnemies.Add(Instantiate(enemy, new Vector3(0, 0, -spawnerDistance), Quaternion.Euler(0, 0, 0))); break;
-                            case 3: currentEnemies.Add(Instantiate(enemy, new Vector3(0, 0, spawnerDistance), Quaternion.Euler(0, 0, 0))); break;
+                            int rn = Random.Range(0, 4);
+                            if (spawnUsed[rn])
+                                continue;
+
+                            spawned = true;
+                            spawnUsed[rn] = true;
+
+                            switch (rn)
+                            {
+                                case 0: activeIndicators.Add(Instantiate(spawnIndicator, new Vector3(-spawnerDistance, 0, 0), Quaternion.Euler(0, 0, 0))); break;
+                                case 1: activeIndicators.Add(Instantiate(spawnIndicator, new Vector3(spawnerDistance, 0, 0), Quaternion.Euler(0, 0, 0))); break;
+                                case 2: activeIndicators.Add(Instantiate(spawnIndicator, new Vector3(0, 0, -spawnerDistance), Quaternion.Euler(0, 0, 0))); break;
+                                case 3: activeIndicators.Add(Instantiate(spawnIndicator, new Vector3(0, 0, spawnerDistance), Quaternion.Euler(0, 0, 0))); break;
+                            }
                         }
                     }
                 }
-
-                foreach (GameObject enemy in currentEnemies) 
+                else
                 {
-                    //TODO: generalize (probably create a base class for all enemy AIs)
-                    enemy.GetComponent<EnemySwordMotor>().SetChasing(true);    
-                }
+                    spawnTimerRemaining -= Time.fixedDeltaTime;
+                    if (spawnTimerRemaining <= 0)
+                    {
+                        if (enemies.Count == 0)
+                        {
+                            cleared = true;
+                            Instantiate(reward, Vector3.zero, Quaternion.Euler(0, 0, 0));
+                            return;
+                        }
 
-                enemies.RemoveAt(0);
+                        GameObject[] enemiesToSpawn = enemies[0];
+                        for (int i = 0; i < enemiesToSpawn.Length; i++)
+                        {
+                            currentEnemies.Add(Instantiate(enemiesToSpawn[i], activeIndicators[0].transform.position, Quaternion.Euler(0, 0, 0)));
+                            Destroy(activeIndicators[0]);
+                            activeIndicators.RemoveAt(0);
+                        }
+
+                        foreach (GameObject enemy in currentEnemies)
+                        {
+                            //TODO: generalize (probably create a base class for all enemy AIs)
+                            enemy.GetComponent<EnemySwordMotor>().SetChasing(true);
+                        }
+
+                        enemies.RemoveAt(0);
+                    }
+                }
             }
         }
     }
 
-    public void ArenaSettings(List<GameObject[]> enemies, GameObject reward) 
+    public void ArenaSettings(List<GameObject[]> enemies, GameObject reward, GameObject spawnIndicator) 
     {
         this.enemies = enemies;
         this.reward = reward;
+        this.spawnIndicator = spawnIndicator;
     } 
 }

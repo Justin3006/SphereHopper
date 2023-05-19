@@ -523,6 +523,7 @@ public class PlayerMotor : Vulnerable
     protected override void Kill()
     {
         SceneManager.LoadScene(0);
+        LevelManager.ResetLevel();
         PlayerManager.AddUsesToAbilities(999);
     }
 }

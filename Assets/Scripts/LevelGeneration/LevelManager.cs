@@ -74,13 +74,14 @@ public class LevelManager : MonoBehaviour
         for (int i = maxDepth; i < numberOfLevels; i++) 
         {
             int rn = Random.Range(0, 4);
-            switch (rn)
-            {
-                case 0: levels.Add(new PlaceholderLevel()); break;
-                case 1: levels.Add(new LabyrinthLevel()); break;
-                case 2: levels.Add(new ArenaLevel()); break;
-                case 3: levels.Add(new DropLevel()); break;
-            }
+            //switch (rn)
+            //{
+            //    case 0: levels.Add(new PlaceholderLevel()); break;
+            //    case 1: levels.Add(new LabyrinthLevel()); break;
+            //    case 2: levels.Add(new ArenaLevel()); break;
+            //    case 3: levels.Add(new DropLevel()); break;
+            //}
+            levels.Add(new DesertLevel());
 
             int priorLevel = Random.Range(0, levelPositions.Count + 1);
 

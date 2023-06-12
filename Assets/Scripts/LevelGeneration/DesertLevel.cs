@@ -26,6 +26,6 @@ public class DesertLevel : MonoBehaviour, ILevel
         if (hit.collider == null)
             Physics.Raycast(Vector3.forward, -Vector3.up, out hit);
         if (hit.collider != null)
-            Instantiate((GameObject)Resources.Load("LevelGenerator/Transporter", typeof(GameObject)), hit.point, Quaternion.Euler(0, 0, 0));
+            Instantiate((GameObject)Resources.Load("Enemies/EnemyWyrm", typeof(GameObject)), hit.point, Quaternion.Euler(0, 0, 0));
     }
 }

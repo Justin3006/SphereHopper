@@ -39,6 +39,8 @@ public class PlayerMotor : Vulnerable
     int bonusJumpsMax = 2;
     int bonusJumpsRemaining;
 
+    float jumpModifier = 1;
+
     [SerializeField]
     float dashSpeed = 30;
     [SerializeField]
@@ -122,6 +124,19 @@ public class PlayerMotor : Vulnerable
         }
 
 
+        //SUBSECTION: Displacement
+        if (stun > 0)
+        {
+            movLockTime = stun;
+            stun = 0;
+            attackDuration = 0;
+            parryDuration = 0;
+
+            //TODO: Change directedImpact.magnitude/3 * transform.up for something that scales better with different impact and stun values
+            rb.velocity = directedImpact + directedImpact.magnitude / 3 * transform.up;
+        }
+
+
         //SUBSECTION: Direct Inputs
         if (movLockTime <= 0)
         {
@@ -201,12 +216,12 @@ public class PlayerMotor : Vulnerable
             {
                 if (grounded)
                 {
-                    rb.velocity = new Vector3(rb.velocity.x, jumpPower, rb.velocity.z);
+                    rb.velocity = new Vector3(rb.velocity.x, jumpModifier * jumpPower, rb.velocity.z);
                 }
                 else if (bonusJumpsRemaining > 0)
                 {
                     bonusJumpsRemaining--;
-                    rb.velocity = new Vector3(rb.velocity.x, bonusJumpPower, rb.velocity.z);
+                    rb.velocity = new Vector3(rb.velocity.x, jumpModifier * bonusJumpPower, rb.velocity.z);
                 }
             }
 
@@ -518,6 +533,10 @@ public class PlayerMotor : Vulnerable
     public void SetAttackStunModifier(float modifier) 
     {
         attackStunModifier = modifier;
+    }
+    public void SetJumpModifier(float modifier) 
+    {
+        jumpModifier = modifier;
     }
 
     protected override void Kill()

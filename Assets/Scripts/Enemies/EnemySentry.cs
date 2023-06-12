@@ -18,7 +18,6 @@ public class EnemySentry : Vulnerable
     [SerializeField]
     private float projectileCDMax = 0.1f;
     private float projectileCD;
-    //TODO: implement imprecision to aim
     [SerializeField]
     private float spreadAngleMax = 2.5f;
 

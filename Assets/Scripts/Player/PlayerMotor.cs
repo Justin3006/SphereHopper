@@ -263,7 +263,7 @@ public class PlayerMotor : Vulnerable
             Collider[] inTheWay = Physics.OverlapCapsule(desPos + 0.75f * transform.up, desPos + 2 * transform.up, 0.5f);
             foreach (Collider c in inTheWay) 
             {
-                if (c.gameObject.name != "Player")
+                if (c.gameObject.name != "Player" && !c.isTrigger)
                 {
                     desPos = transform.position;
                     dashDuration = 0;
@@ -537,6 +537,10 @@ public class PlayerMotor : Vulnerable
     public void SetJumpModifier(float modifier) 
     {
         jumpModifier = modifier;
+    }
+    public void SetExecuteImmunity(bool state) 
+    {
+        executeImmunity = state;
     }
 
     protected override void Kill()

@@ -300,6 +300,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7521923325937894989, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: orthographic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923325937894989, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7521923325937894989, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24ce1e22d7ef10449a2ffe98914f1fd5, type: 3}
 --- !u!4 &151528096 stripped
@@ -574,6 +586,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1573040217913935063, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}
+      propertyPath: numberOfRocks
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573040217913935063, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}
+      propertyPath: attackIndicator
+      value: 
+      objectReference: {fileID: 4697760655425041215, guid: af6fee64f972c904ea9c0f5a3ba50fbf, type: 3}
+    - target: {fileID: 1573040217913935063, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}
+      propertyPath: minDistBetweenRocks
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1573040217913935063, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}
+      propertyPath: maxDistanceBetweenRocks
+      value: 75
+      objectReference: {fileID: 0}
     - target: {fileID: 1573040217913935066, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -624,7 +652,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1573040217913935067, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f4058d61eaa5f3c4dbe8385746495b2b, type: 3}

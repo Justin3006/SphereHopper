@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyWyrmHead : Vulnerable
 {
+    //TODO: Rename to EnemyWeakPoint and make it a generic weakpoint for future enemies
     protected override void Kill() 
     {
         Destroy(gameObject.transform.parent.gameObject);

@@ -20,6 +20,8 @@ public class ArenaLevel : MonoBehaviour, ILevel
                 {
                     case 0: added = true; wave1[i] = (GameObject)Resources.Load("Enemies/EnemySwordRotColl", typeof(GameObject)); break;
                     case 1: added = true; wave1[i] = (GameObject)Resources.Load("Enemies/Frenchman", typeof(GameObject)); break;
+                    case 2: added = true; wave1[i] = (GameObject)Resources.Load("Enemies/Frenchman", typeof(GameObject)); break;
+                    case 3: added = true; wave1[i] = (GameObject)Resources.Load("Enemies/EnemySentry", typeof(GameObject)); break;
                 }
                 rn--;
             }
@@ -35,8 +37,9 @@ public class ArenaLevel : MonoBehaviour, ILevel
                 {
                     case 0: added = true; wave2[i] = (GameObject)Resources.Load("Enemies/EnemySwordRotColl", typeof(GameObject)); break;
                     case 1: added = true; wave2[i] = (GameObject)Resources.Load("Enemies/Frenchman", typeof(GameObject)); break;
+                    case 2: added = true; wave2[i] = (GameObject)Resources.Load("Enemies/Frenchman", typeof(GameObject)); break;
+                    case 3: added = true; wave2[i] = (GameObject)Resources.Load("Enemies/EnemySentry", typeof(GameObject)); break;
                 }
-                rn--;
             }
         }
 
@@ -50,8 +53,9 @@ public class ArenaLevel : MonoBehaviour, ILevel
                 {
                     case 0: added = true; wave3[i] = (GameObject)Resources.Load("Enemies/EnemySwordRotColl", typeof(GameObject)); break;
                     case 1: added = true; wave3[i] = (GameObject)Resources.Load("Enemies/Frenchman", typeof(GameObject)); break;
+                    case 2: added = true; wave3[i] = (GameObject)Resources.Load("Enemies/Frenchman", typeof(GameObject)); break;
+                    case 3: added = true; wave3[i] = (GameObject)Resources.Load("Enemies/EnemySentry", typeof(GameObject)); break;
                 }
-                rn--;
             }
         }
 

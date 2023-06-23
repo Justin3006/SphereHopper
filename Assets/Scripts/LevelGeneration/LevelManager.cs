@@ -31,13 +31,20 @@ public class LevelManager : MonoBehaviour
         Vector3 currentPos = Vector3.zero;
         for (int i = 0; i < maxDepth; i++) 
         {
-            int rn = Random.Range(0, 4);
-            switch (rn) 
+            if (i == maxDepth - 1)
             {
-                case 0: levels.Add(new PlaceholderLevel()); break;
-                case 1: levels.Add(new LabyrinthLevel()); break;
-                case 2: levels.Add(new ArenaLevel()); break;
-                case 3: levels.Add(new DropLevel()); break;
+                levels.Add(new DesertLevel());
+            }
+            else
+            {
+                int rn = Random.Range(0, 4);
+                switch (rn)
+                {
+                    case 0: levels.Add(new PlaceholderLevel()); break;
+                    case 1: levels.Add(new LabyrinthLevel()); break;
+                    case 2: levels.Add(new ArenaLevel()); break;
+                    case 3: levels.Add(new DropLevel()); break;
+                }
             }
 
             Vector3 oldPos = currentPos;
@@ -74,16 +81,19 @@ public class LevelManager : MonoBehaviour
         for (int i = maxDepth; i < numberOfLevels; i++) 
         {
             int rn = Random.Range(0, 4);
-            //switch (rn)
-            //{
-            //    case 0: levels.Add(new PlaceholderLevel()); break;
-            //    case 1: levels.Add(new LabyrinthLevel()); break;
-            //    case 2: levels.Add(new ArenaLevel()); break;
-            //    case 3: levels.Add(new DropLevel()); break;
-            //}
-            levels.Add(new DesertLevel());
+            switch (rn)
+            {
+                case 0: levels.Add(new PlaceholderLevel()); break;
+                case 1: levels.Add(new LabyrinthLevel()); break;
+                case 2: levels.Add(new ArenaLevel()); break;
+                case 3: levels.Add(new DropLevel()); break;
+            }
 
             int priorLevel = Random.Range(0, levelPositions.Count + 1);
+            while (priorLevel == maxDepth) 
+            { 
+                priorLevel = Random.Range(0, levelPositions.Count + 1);
+            }
 
             bool tooClose;
             do

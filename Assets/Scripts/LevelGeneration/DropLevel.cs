@@ -11,9 +11,10 @@ public class DropLevel : MonoBehaviour, ILevel
     float maxPercentageOfEnemies = 0.33f;
     List<int> enemyPositions = new List<int>();
 
-    int maxLayer = 10;
+    int maxLayer = 30;
     float avgDistanceBetweenLayers = 10;
     float maxDistanceBetweenTiles = 20;
+    int lastLayerForExpansion = 10;
 
     int minTilesPerLayer = 1;
     int maxTilesPerLayer = 2;
@@ -46,8 +47,10 @@ public class DropLevel : MonoBehaviour, ILevel
 
     private void BuildLevel(Vector3 startPos, int layer) 
     {
-        int numOfTIles = Random.Range(minTilesPerLayer, maxTilesPerLayer + 1);
-        for (int i = 0; i < numOfTIles; i++) 
+        int numOfTiles = 1;
+        if (layer <= lastLayerForExpansion)
+            numOfTiles = Random.Range(minTilesPerLayer, maxTilesPerLayer + 1);
+        for (int i = 0; i < numOfTiles; i++) 
         {
             int tileType = Random.Range(0, 2);
             switch (tileType) 

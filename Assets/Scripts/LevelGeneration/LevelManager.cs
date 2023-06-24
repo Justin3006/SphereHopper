@@ -86,7 +86,7 @@ public class LevelManager : MonoBehaviour
                 case 0: levels.Add(new PlaceholderLevel()); break;
                 case 1: levels.Add(new LabyrinthLevel()); break;
                 case 2: levels.Add(new ArenaLevel()); break;
-                case 3: levels.Add(new DropLevel()); break;
+                case 3: levels.Add(new DropLevel()); break;  
             }
 
             int priorLevel = Random.Range(0, levelPositions.Count + 1);
@@ -127,14 +127,14 @@ public class LevelManager : MonoBehaviour
         {
             for (int j = 0; j < levelPositions.Count; j++) 
             {
-                if ((levelPositions[i] - levelPositions[j]).magnitude <= maxDistance) 
+                if ((levelPositions[i] - levelPositions[j]).magnitude <= maxDistance && i != maxDepth - 1 && j != maxDepth - 1) 
                 {
                     connected[j + 1, i + 1] = true;
                     connected[i + 1, j + 1] = true;
                 }    
             }
 
-            if (levelPositions[i].magnitude <= maxDistance) 
+            if (levelPositions[i].magnitude <= maxDistance && i != maxDepth - 1) 
             {
                 connected[0, i + 1] = true;
                 connected[i + 1, 0] = true;

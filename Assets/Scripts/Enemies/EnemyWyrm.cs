@@ -77,7 +77,9 @@ public class EnemyWyrm : MonoBehaviour
 
     private WyrmState[] actionArray = new WyrmState[100];
 
-    //TODO: implement attack, that keeps the player away from rocks
+    [SerializeField]
+    private float safetyShotDistance = 40;
+
     //TODO. implement warnings before attacks
 
     // Start is called before the first frame update
@@ -128,13 +130,21 @@ public class EnemyWyrm : MonoBehaviour
 
         if (stateChangeCDRemaining <= 0) 
         {
-            WyrmState previousState = currentState;
-            do
+            Vector3 newPosition = PlayerManager.GetPosition();
+            if (PlayerManager.GetExecuteImmunity())
             {
-                currentState = actionArray[Random.Range(0, 100)];
+                currentState = WyrmState.OPEN;
+                newPosition -= safetyShotDistance * Vector3.right;
             }
-            while (currentState.Equals(previousState));
-
+            else
+            {
+                WyrmState previousState = currentState;
+                do
+                {
+                    currentState = actionArray[Random.Range(0, 100)];
+                }
+                while (currentState.Equals(previousState));
+            }
             switch (currentState) 
             {
                 case WyrmState.HIDING: 
@@ -158,7 +168,7 @@ public class EnemyWyrm : MonoBehaviour
                         projectileOrigin = head;
                     projectilesToFire = projectilesInBarrage;
 
-                    transform.position = PlayerManager.GetPosition() + 0.01f * Vector3.up;
+                    transform.position = newPosition + 0.01f * Vector3.up;
                     shufflePositions();
 
                     RaycastHit hit;
@@ -186,6 +196,7 @@ public class EnemyWyrm : MonoBehaviour
 
 
                 case WyrmState.UNDERGROUNDATTACK:
+                    transform.position = newPosition + 0.01f * Vector3.up;
                     head.SetActive(false);
                     foreach (GameObject tail in tails)
                         tail.SetActive(false);

@@ -24,4 +24,9 @@ public class PlayerManager : MonoBehaviour
             a.AddUses(uses);
         }
     }
+
+    public static bool GetExecuteImmunity() 
+    {
+        return player.GetComponent<Vulnerable>().executeImmunity;
+    }
 }

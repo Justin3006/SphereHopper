@@ -8,7 +8,7 @@ public class Vulnerable : MonoBehaviour
     [SerializeField]
     protected int maxHp = 3;
     [SerializeField]
-    protected bool damageImmunity;
+    public bool damageImmunity { get; protected set; }
     protected int hp;
 
     protected bool shielded;
@@ -21,11 +21,11 @@ public class Vulnerable : MonoBehaviour
     float indicatorDuration;
 
     [SerializeField]
-    protected bool executeImmunity;
+    public bool executeImmunity { get; protected set; }
     protected float executePercentage = 0;
 
     [SerializeField]
-    protected bool knockbackImmunity;
+    public bool knockbackImmunity { get; protected set; }
     protected Vector3 directedImpact;
     protected float stun;
 

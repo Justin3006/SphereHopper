@@ -392,11 +392,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 3
-  damageImmunity: 0
   damageIndicator: {fileID: 0}
   indicatorDurationMax: 0.2
-  executeImmunity: 0
-  knockbackImmunity: 0
 --- !u!1 &1573040217650949457
 GameObject:
   m_ObjectHideFlags: 0
@@ -639,6 +636,11 @@ MonoBehaviour:
   maxDistanceBetweenRocks: 75
   sandStorm: {fileID: 1902986959008979442, guid: c82a5fcac39ffe1428cc400756ee8049, type: 3}
   sandStormTime: 12
+  probabilitySandstorm: 5
+  probabilityProjectile: 50
+  probabilityAttack: 35
+  probabilityHide: 10
+  safetyShotDistance: 40
 --- !u!1 &1573040218196111545
 GameObject:
   m_ObjectHideFlags: 0

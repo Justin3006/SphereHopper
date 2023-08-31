@@ -38,13 +38,15 @@ public class LevelManager : MonoBehaviour
             else
             {
                 int rn = Random.Range(0, 4);
-                switch (rn)
-                {
-                    case 0: levels.Add(new PlaceholderLevel()); break;
-                    case 1: levels.Add(new LabyrinthLevel()); break;
-                    case 2: levels.Add(new ArenaLevel()); break;
-                    case 3: levels.Add(new DropLevel()); break;
-                }
+                //switch (rn)
+                //{
+                //    case 0: levels.Add(new PlaceholderLevel()); break;
+                //    case 1: levels.Add(new LabyrinthLevel()); break;
+                //    case 2: levels.Add(new ArenaLevel()); break;
+                //    case 3: levels.Add(new DropLevel()); break;
+                //    case 4: levels.Add(new GridLevel()); break;
+                //}
+                levels.Add(new GridLevel());
             }
 
             Vector3 oldPos = currentPos;
@@ -81,14 +83,15 @@ public class LevelManager : MonoBehaviour
         for (int i = maxDepth; i < numberOfLevels; i++) 
         {
             int rn = Random.Range(0, 4);
-            switch (rn)
-            {
-                case 0: levels.Add(new PlaceholderLevel()); break;
-                case 1: levels.Add(new LabyrinthLevel()); break;
-                case 2: levels.Add(new ArenaLevel()); break;
-                case 3: levels.Add(new DropLevel()); break;  
-            }
-
+            //switch (rn)
+            //{
+            //    case 0: levels.Add(new PlaceholderLevel()); break;
+            //    case 1: levels.Add(new LabyrinthLevel()); break;
+            //    case 2: levels.Add(new ArenaLevel()); break;
+            //    case 3: levels.Add(new DropLevel()); break;
+            //    case 4: levels.Add(new GridLevel()); break;
+            //}
+            levels.Add(new GridLevel());
             int priorLevel = Random.Range(0, levelPositions.Count + 1);
             while (priorLevel == maxDepth) 
             { 

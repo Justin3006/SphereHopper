@@ -100,6 +100,9 @@ public class PlayerMotor : Vulnerable
     [SerializeField]
     GameObject abilityText;
 
+    [SerializeField]
+    GameObject swordGFX;
+
 
     //SECTION: Initialization
     void Start()
@@ -310,6 +313,7 @@ public class PlayerMotor : Vulnerable
                     }
                 }
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
+                swordGFX.transform.localRotation = Quaternion.Euler(45, 0, 0);
             }
         }
 
@@ -323,6 +327,7 @@ public class PlayerMotor : Vulnerable
             {
                 swordCD = 0;
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, -200, 0);
+                swordGFX.transform.localRotation = Quaternion.Euler(15, 0, 0);
             }
             // reset when parry is done
             if (parryDuration <= 0)
@@ -330,6 +335,7 @@ public class PlayerMotor : Vulnerable
                 shielded = false;
                 shieldedAttacks = 0;
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, -200, 0);
+                swordGFX.transform.localRotation = Quaternion.Euler(45, 0, 0);
             }
         }
 
@@ -362,6 +368,7 @@ public class PlayerMotor : Vulnerable
             if (swordCD <= 0) 
             {
                 swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, -200, 0);
+                swordGFX.transform.localRotation = Quaternion.Euler(15, 0, 0);
                 hitIndicator.SetActive(false);
             }
         }
@@ -460,6 +467,7 @@ public class PlayerMotor : Vulnerable
             swordCD = attackCDMax;
             attackDuration = attackDurationMax;
             swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(500, 200, 0);
+            swordGFX.transform.localRotation = Quaternion.Euler(5, 0, 0);
         }
     }
 
@@ -477,6 +485,7 @@ public class PlayerMotor : Vulnerable
             swordCD = parryCDMax;
             parryDuration = parryDurationMax;
             swordIndicator.GetComponent<RectTransform>().localPosition = new Vector3(-500, 200, 0);
+            swordGFX.transform.localRotation = Quaternion.Euler(15, 0, 45);
         }
     }
 

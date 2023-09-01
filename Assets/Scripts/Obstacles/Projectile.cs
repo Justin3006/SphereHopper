@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
         transform.Translate(0, 0, speed * Time.fixedDeltaTime);
     }
 
-    public void OnTriggerEnter(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         Vulnerable target = other.gameObject.GetComponent<Vulnerable>();
         if (target != null) 
